@@ -16,6 +16,9 @@ public class PlayerControl : MonoBehaviour
 
     private void Start()
     {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = true;
+
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
     }
