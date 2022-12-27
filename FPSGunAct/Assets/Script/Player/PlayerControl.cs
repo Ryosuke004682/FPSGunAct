@@ -50,9 +50,5 @@ public class PlayerControl : MonoBehaviour
         {
             rb.velocity = nomalizeSpeed * _speed;
         }
-
-
-
     }
-
 }
