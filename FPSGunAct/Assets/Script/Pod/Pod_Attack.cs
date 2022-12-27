@@ -52,7 +52,8 @@ public class Pod_Attack : MonoBehaviour
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             Vector3 rayPosition = ray.direction;
 
-            newBallet.GetComponent<Rigidbody>().AddForce(rayPosition * inJect, ForceMode.Impulse);
+            newBallet.GetComponent<Rigidbody>().AddForce(rayPosition
+                * inJect, ForceMode.Impulse);
 
             Destroy(newBallet, 1.0f);
 
