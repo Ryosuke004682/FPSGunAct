@@ -22,7 +22,7 @@ public class PlayerControl : MonoBehaviour
 
     private void Update()
     {
-        
+        InputMove();
     }
 
     private void FixedUpdate()
@@ -35,20 +35,18 @@ public class PlayerControl : MonoBehaviour
         var vertical = Input.GetAxis("Vertical");
         var horizontal = Input.GetAxis("Horizontal");
 
-        Vector3 velocity = new Vector3(horizontal , 0 , vertical);
-        velocity.Normalize();
+        Vector3 velocity = new (horizontal , 0 , vertical);
+        var nomalizeSpeed = velocity.normalized;
 
 
-        if(Input.GetKeyDown(KeyCode.LeftShift))
+        if(Input.GetKey(KeyCode.LeftShift))
         {
-            rb.velocity = velocity * _runSpeed;
+            rb.velocity = nomalizeSpeed * _runSpeed;
         }
         else
         {
-            rb.velocity = velocity * _speed;
+            rb.velocity = nomalizeSpeed * _speed;
         }
-
-        
 
 
 
