@@ -4,18 +4,21 @@ using System.Collections.Generic;
 using UnityEditor.UIElements;
 using UnityEngine;
 
-public class Game_Event : MonoBehaviour
+public class Game_Event0 : MonoBehaviour
 {
     [SerializeField, Header("敵を格納")]
     private GameObject[] enemyObject;
+
+    //First
+    [SerializeField, Header("アニメーターのパラメータを入れるとこ")]
+    private string stateParameterName = "";
 
     Animator anim;
 
     private void Start()
     {
         anim = GetComponent<Animator>();
-        anim.SetBool("Event_One", false);
-        anim.SetBool("Event_Second" , false);
+        anim.SetBool(stateParameterName, false);
     }
 
     private void Update()
@@ -41,8 +44,7 @@ public class Game_Event : MonoBehaviour
 
         if (enemyObject.Length == 0)
         {
-            anim.SetBool("Event_One", true);
-            anim.SetBool("Event_Second" , true);
+            anim.SetBool(stateParameterName, true);
         }
     }
 }

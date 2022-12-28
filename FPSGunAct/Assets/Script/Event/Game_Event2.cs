@@ -8,12 +8,16 @@ public class Game_Event2 : MonoBehaviour
     [SerializeField, Header("敵を格納")]
     private GameObject[] enemyObject;
 
+    //Event_Scondのパラメータ
+    [SerializeField, Header("アニメーターのパラメータを入れるとこ")]
+    private string stateParameterName = "";
+
     Animator anim;
 
     private void Start()
     {
         anim = GetComponent<Animator>();
-        anim.SetBool("Event_Scond", false);
+        anim.SetBool(stateParameterName, false);
     }
 
     private void Update()
@@ -31,7 +35,6 @@ public class Game_Event2 : MonoBehaviour
 
     public IEnumerator Event()
     {
-        yield return null;
 
         enemyObject = GameObject.FindGameObjectsWithTag("Enemy");
         Debug.Log(enemyObject.Length);
@@ -39,7 +42,10 @@ public class Game_Event2 : MonoBehaviour
 
         if (enemyObject.Length == 0)
         {
-            anim.SetBool("Event_Scond", true);
+            yield return new WaitForSeconds(2);
+            anim.SetBool(stateParameterName, true);
         }
+
+
     }
 }
