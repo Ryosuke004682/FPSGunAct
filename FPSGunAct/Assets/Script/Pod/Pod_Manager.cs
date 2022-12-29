@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Pod_Manager : MonoBehaviour
 {
+   
     Animator _anim;
 
     private void Start()
@@ -14,6 +15,7 @@ public class Pod_Manager : MonoBehaviour
     private void Update()
     {
         PodAnim();
+        
     }
 
     private void PodAnim()
@@ -27,5 +29,4 @@ public class Pod_Manager : MonoBehaviour
             _anim.SetBool("Attack" , false);
         }
     }
-
 }
