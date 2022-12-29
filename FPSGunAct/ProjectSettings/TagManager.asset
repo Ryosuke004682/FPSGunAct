@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Enemy
   - Bullet
+  - Position
   layers:
   - Default
   - TransparentFX
@@ -13,8 +14,8 @@ TagManager:
   - PostProcessing
   - Water
   - UI
-  - 
-  - 
+  - Player
+  - Bullet
   - 
   - 
   - 
