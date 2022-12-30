@@ -66,7 +66,13 @@ public class PlayerControl : MonoBehaviour
 
     void Jump()
     {
+        
+    }
+
+    private void InputAttack()
+    {
 
     }
+
 
 }
