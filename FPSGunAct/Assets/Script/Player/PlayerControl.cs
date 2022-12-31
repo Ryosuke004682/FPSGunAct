@@ -64,11 +64,13 @@ public class PlayerControl : MonoBehaviour
 
     }
 
+    //ジャンプは二段ジャンプできるようにする。
     void Jump()
     {
         
     }
 
+    //攻撃のモーションを入れる。
     private void InputAttack()
     {
 
