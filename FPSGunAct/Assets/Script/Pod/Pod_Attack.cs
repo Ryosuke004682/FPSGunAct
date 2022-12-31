@@ -60,9 +60,6 @@ public class Pod_Attack : MonoBehaviour
 
             }
 
-
-
-
             Destroy(newBallet, 1.0f);
 
             time = 0;
