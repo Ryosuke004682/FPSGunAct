@@ -1,6 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerControl : MonoBehaviour
@@ -11,17 +10,28 @@ public class PlayerControl : MonoBehaviour
     [SerializeField, Header("Playerの走るスピード")]
     private float _runSpeed = 5.0f;
 
+    [SerializeField, Header("ジャンプ力")]
+    private float _jumpPower;
+
     [SerializeField, Header("カメラの回転量")]
     private float rotationSpeed = 500;
 
+    bool JumpCheack = false;
+    bool isGraund   = false;
+
+    RaycastHit _hit;
+    Ray _ray;
+
+
     Rigidbody rb;
+    Vector3 position;
 
     Quaternion rotate;
 
     private void Start()
     {
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = true;
+        UnityEngine.Cursor.lockState = CursorLockMode.Locked;
+        UnityEngine.Cursor.visible = true;
 
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
@@ -32,6 +42,7 @@ public class PlayerControl : MonoBehaviour
     private void Update()
     {
        PlayerCore();
+       Jump();
     }
 
     private void FixedUpdate()
@@ -64,17 +75,16 @@ public class PlayerControl : MonoBehaviour
 
     }
 
+    void GrandCheack()
+    {
+
+    }
+
+
+    //重力も考える
     //ジャンプは二段ジャンプできるようにする。
     void Jump()
     {
-        
+     
     }
-
-    //攻撃のモーションを入れる。
-    private void InputAttack()
-    {
-
-    }
-
-
 }
