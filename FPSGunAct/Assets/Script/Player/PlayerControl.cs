@@ -10,11 +10,17 @@ public class PlayerControl : MonoBehaviour
     [SerializeField, Header("Playerの走るスピード")]
     private float _runSpeed = 5.0f;
 
-    [SerializeField, Header("ジャンプ力")]
-    private float _jumpPower;
+    [SerializeField, Header("ジャンプのカウンター")]
+    private float _jumpCount = 0;
+
+    [SerializeField, Header("ジャンプ力(内部で ×1000してるので注意)")]
+    private float _jumpPower = 300;
 
     [SerializeField, Header("カメラの回転量")]
     private float rotationSpeed = 500;
+
+    private float fallTime = 0f;
+
 
     bool JumpCheack = false;
     bool isGraund   = false;
@@ -24,7 +30,7 @@ public class PlayerControl : MonoBehaviour
 
 
     Rigidbody rb;
-    Vector3 position;
+    Vector3 velocty;
 
     Quaternion rotate;
 
@@ -37,12 +43,15 @@ public class PlayerControl : MonoBehaviour
         rb.freezeRotation = true;
 
         rotate = transform.rotation;
+
+        velocty = Vector3.zero;
     }
 
     private void Update()
     {
-       PlayerCore();
-       Jump();
+        GrandCheack();
+        PlayerCore();
+        Jump();
     }
 
     private void FixedUpdate()
@@ -77,6 +86,14 @@ public class PlayerControl : MonoBehaviour
 
     void GrandCheack()
     {
+        fallTime += Time.deltaTime; 
+        velocty.y = Physics.gravity.y * fallTime;
+        rb.AddForce(velocty * Time.deltaTime);
+
+        //if()
+        //{
+
+        //}
 
     }
 
@@ -85,6 +102,19 @@ public class PlayerControl : MonoBehaviour
     //ジャンプは二段ジャンプできるようにする。
     void Jump()
     {
-     
+      if(_jumpCount < 2 && Input.GetKeyDown(KeyCode.Space))
+        {
+            rb.velocity = Vector3.zero;
+            rb.AddForce(0.0f , _jumpPower*1000 , 0.0f);
+            _jumpCount++;
+        }
+    }
+
+    private void OnCollisionEnter(Collision other)
+    {
+        if(other.gameObject.CompareTag("Ground"))
+        {
+            _jumpCount = 0;
+        }
     }
 }
