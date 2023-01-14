@@ -4,6 +4,7 @@ using UnityEngine.UIElements;
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerControl : MonoBehaviour
 {
+    [Header("Playerの設定")]
     [SerializeField, Header("Playerの通常の速度")]
     private  float _speed = 2.0f;
 
@@ -16,6 +17,13 @@ public class PlayerControl : MonoBehaviour
     [SerializeField, Header("ジャンプ力(内部で ×1000してるので注意)")]
     private float _jumpPower = 300;
 
+    [SerializeField, Header("重力による落下速度")]
+    private float multiplier = 2f;
+
+
+    //カメラ
+
+    [Header("カメラの設定")]
     [SerializeField, Header("カメラの回転量")]
     private float rotationSpeed = 500;
 
@@ -23,14 +31,14 @@ public class PlayerControl : MonoBehaviour
 
 
     bool JumpCheack = false;
+    bool secondJumpCheack = false;
     bool isGraund   = false;
 
     RaycastHit _hit;
     Ray _ray;
 
-
     Rigidbody rb;
-    Vector3 velocty;
+    Transform _transform;
 
     Quaternion rotate;
 
@@ -43,13 +51,10 @@ public class PlayerControl : MonoBehaviour
         rb.freezeRotation = true;
 
         rotate = transform.rotation;
-
-        velocty = Vector3.zero;
     }
 
     private void Update()
     {
-        GrandCheack();
         PlayerCore();
         Jump();
     }
@@ -84,29 +89,40 @@ public class PlayerControl : MonoBehaviour
 
     }
 
-    void GrandCheack()
-    {
-        fallTime += Time.deltaTime; 
-        velocty.y = Physics.gravity.y * fallTime;
-        rb.AddForce(velocty * Time.deltaTime);
-
-        //if()
-        //{
-
-        //}
-
-    }
-
-
+    //地面かどうかもチェックする。
     //重力も考える
     //ジャンプは二段ジャンプできるようにする。
     void Jump()
     {
-      if(_jumpCount < 2 && Input.GetKeyDown(KeyCode.Space))
+        var gravity = Physics.gravity;
+        var velocity = Vector3.down;
+
+        if (_jumpCount < 2 && Input.GetKeyDown(KeyCode.Space))
         {
+            JumpCheack = true;
+            secondJumpCheack = false;
+
             rb.velocity = Vector3.zero;
-            rb.AddForce(0.0f , _jumpPower*1000 , 0.0f);
+            rb.AddForce(0.0f , _jumpPower * 1000 , 0.0f);
             _jumpCount++;
+
+            if(_jumpCount == 1 && JumpCheack == true)
+            {
+                secondJumpCheack = true;
+                isGraund = false;
+
+                rb.velocity = velocity * 1.0f;
+            }
+            else if(_jumpCount == 2 && secondJumpCheack == true)
+            {
+                isGraund = false;
+                rb.velocity += velocity * 5.0f;
+            }
+            else
+            {
+                isGraund = true;
+                secondJumpCheack = false;
+            }
         }
     }
 
