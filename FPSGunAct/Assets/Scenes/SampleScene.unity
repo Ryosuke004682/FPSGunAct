@@ -1891,7 +1891,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh24912
+  m_Name: pb_Mesh24910
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -18802,9 +18802,10 @@ MonoBehaviour:
   _speed: 2
   _runSpeed: 5
   _jumpCount: 0
-  _jumpPower: 3
-  multiplier: 5
+  _jumpPower: 50
+  multiplier: 50
   rotationSpeed: 500
+  isEnable: 0
 --- !u!54 &6774320899035411650
 Rigidbody:
   m_ObjectHideFlags: 0
