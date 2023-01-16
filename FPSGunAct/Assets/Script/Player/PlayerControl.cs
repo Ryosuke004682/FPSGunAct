@@ -4,6 +4,7 @@ using UnityEngine.UIElements;
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerControl : MonoBehaviour
 {
+
     [Header("Playerの設定")]
     [SerializeField, Header("Playerの通常の速度")]
     private  float _speed = 2.0f;
@@ -19,6 +20,9 @@ public class PlayerControl : MonoBehaviour
     [SerializeField, Header("ジャンプ力(内部で ×1000してるので注意)")]
     private float _jumpPower = 300;
 
+    [SerializeField, Header("重力")]
+    private float fallSpeed = 5;
+
     [SerializeField, Header("重力による落下速度")]
     private float multiplier = 2f;
 
@@ -29,11 +33,9 @@ public class PlayerControl : MonoBehaviour
     private float rotationSpeed = 500;
 
 
-    //レイの設定
-    [SerializeField]
-    bool isEnable = false;
-
+    
     bool isJump = false;
+    bool isGravity = false;
     bool isGraund   = false;
 
     RaycastHit _hit;
@@ -60,8 +62,9 @@ public class PlayerControl : MonoBehaviour
     private void Update()
     {
         PlayerCore();
+        Gravity();
 
-        if(_jumpCount < _maxJumpCount && Input.GetKeyDown(KeyCode.Space))
+        if (_jumpCount < _maxJumpCount && Input.GetKeyDown(KeyCode.Space))
         {
             isJump = true;
 
@@ -72,15 +75,15 @@ public class PlayerControl : MonoBehaviour
             else if (_jumpCount == 1)
             {
                 _anim.SetBool("SecondJump", true);
+                
             }
         }
-
-       
     }
 
     private void FixedUpdate()
     {
         Jump();
+        
     }
 
     void PlayerCore()
@@ -116,6 +119,7 @@ public class PlayerControl : MonoBehaviour
             rb.velocity = Vector3.zero;
 
             rb.AddForce(Vector3.up * _jumpPower , ForceMode.Impulse);
+            rb.AddForce(fallSpeed * Physics.gravity,ForceMode.Acceleration);
 
             _jumpCount++;
             isJump = false;
@@ -127,37 +131,24 @@ public class PlayerControl : MonoBehaviour
     //空中なら重力を徐々に掛けていく。
     //二段ジャンプ後にストンと落としたい。
     //それに伴って、二段ジャンプにも少し補正を掛ける。
-    
-    void GravitySetting()
+
+    private void Gravity()
     {
-        if(isEnable == false)
-            return;
-        
+        var distance = 1.0f;
 
+        Vector3 rayPosition = transform.position + Vector3.zero;
+        Ray ray = new Ray(rayPosition , Vector3.down);
 
-        var gravity = Physics.gravity.y;
+        isGraund = Physics.Raycast(ray,distance);
 
-        //Rayはスフィアキャストで管理したい。
+        Debug.DrawRay(rayPosition , Vector3.down * distance , Color.green);
 
-        var scale = transform.lossyScale.x * 0.5f;
-        var isHit = Physics.SphereCast(transform.position , scale , transform.forward * 10 , out _hit);
-
-        if(isHit)
-        {
-            Gizmos.DrawRay(transform.position , transform.forward * _hit.distance);
-            Gizmos.DrawWireSphere(transform.position + transform.forward * (_hit.distance ) , scale);
-        }
-        else
-        {
-            Gizmos.DrawRay(transform.position , transform.forward * 100);
-        }
+        //ここで重力計算
 
 
     }
 
-
     
-
     private void OnCollisionEnter(Collision other)
     {
         if(other.gameObject.CompareTag("Ground"))
