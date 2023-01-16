@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -12,19 +13,25 @@ public class PlayerControl : MonoBehaviour
     [SerializeField, Header("Playerの走るスピード")]
     private float _runSpeed = 5.0f;
 
-    [SerializeField, Header("ジャンプのカウンター")]
-    private float _jumpCount = 0;
+    [SerializeField, Header("空中にいるときのプレイヤーの移動スピード")]
+    private float airSpeed = 1.5f;
 
-    private float _maxJumpCount = 2;
+    [SerializeField, Header("ジャンプのカウンター")]
+    private int _jumpCount = 0;
+
+    private int _maxJumpCount = 2;
 
     [SerializeField, Header("ジャンプ力(内部で ×1000してるので注意)")]
-    private float _jumpPower = 300;
+    private float _jumpPower = 300.0f;
+
+    [SerializeField, Header("二段ジャンプ用の力")]
+    private float _secondJumpPower = 5.0f;
 
     [SerializeField, Header("重力")]
-    private float fallSpeed = 5;
+    private float fallSpeed = 5.0f;
 
     [SerializeField, Header("重力による落下速度")]
-    private float multiplier = 2f;
+    private float multiplier = 2.0f;
 
 
     //カメラ
@@ -32,17 +39,16 @@ public class PlayerControl : MonoBehaviour
     [SerializeField, Header("カメラの回転量")]
     private float rotationSpeed = 500;
 
-
-    
     bool isJump = false;
-    bool isGravity = false;
-    bool isGraund   = false;
+    bool isSecondJump; //２回目のジャンプチェック
+    bool isGraund = false;
 
     RaycastHit _hit;
     Ray _ray;
 
     Rigidbody rb;
     Animator _anim;
+    Vector3 velocity;
 
     Quaternion rotate;
 
@@ -63,21 +69,7 @@ public class PlayerControl : MonoBehaviour
     {
         PlayerCore();
         Gravity();
-
-        if (_jumpCount < _maxJumpCount && Input.GetKeyDown(KeyCode.Space))
-        {
-            isJump = true;
-
-            if (_jumpCount == 0)
-            {
-                _anim.SetBool("FirstJump", true);
-            }
-            else if (_jumpCount == 1)
-            {
-                _anim.SetBool("SecondJump", true);
-                
-            }
-        }
+        InputJump();
     }
 
     private void FixedUpdate()
@@ -110,7 +102,6 @@ public class PlayerControl : MonoBehaviour
         transform.rotation = Quaternion.RotateTowards(transform.rotation , rotate , newRotationSpeed);
 
     }
-
     
     void Jump()
     {
@@ -126,6 +117,51 @@ public class PlayerControl : MonoBehaviour
         }
     }
 
+    void InputJump()
+    {
+        if (Input.GetKey(KeyCode.Space) && !_anim.GetCurrentAnimatorStateInfo(0).IsName("FirstJump")
+                                        && !_anim.IsInTransition(0))
+        {
+            _anim.SetBool("FirstJump" , true);
+            velocity.y += _jumpPower;
+        }
+        else if(_anim.GetBool("FirstJump") && !isJump && isSecondJump)
+        {
+            var airMove = new Vector3(Input.GetAxis("Horizontal"), 0 , Input.GetAxis("Vertical")).normalized;
+            velocity = new Vector3(airMove.x * airSpeed , velocity.y , airMove.z * airSpeed);
+
+            //二段目のジャンプの処理
+            if(Input.GetKeyDown(KeyCode.Space))
+            {
+                var getAnimTime = Mathf.Repeat(_anim.GetCurrentAnimatorStateInfo(0).normalizedTime , 1.0f);
+
+                if(_anim.GetCurrentAnimatorStateInfo(0).IsName("FirstJump")　&& 0.85f <= getAnimTime && getAnimTime <= 1.1f)
+                {
+                    isJump = true;
+                    _anim.SetBool("FirstJump" , true);
+
+                    transform.LookAt(transform.position + airMove.normalized);
+
+                    velocity.y += _secondJumpPower;
+                }
+                else
+                {
+                    isSecondJump = true;
+                }
+            }
+            else if (isSecondJump)
+            {
+                airMove = new Vector3(Input.GetAxis("Horizontal"), 0f, Input.GetAxis("Vertical")).normalized;
+                velocity = new Vector3(airMove.x * airSpeed , velocity.y , airMove.z * airSpeed);
+            }
+
+            velocity.y += Physics.gravity.y * Time.deltaTime;
+            rb.AddForce(velocity * Time.deltaTime);
+
+        }
+    }
+
+
     //地面かどうかをチェックして、
     //地面なら重力計算をしない。
     //空中なら重力を徐々に掛けていく。
@@ -134,7 +170,7 @@ public class PlayerControl : MonoBehaviour
 
     private void Gravity()
     {
-        var distance = 1.0f;
+        var distance = 0.25f;
 
         Vector3 rayPosition = transform.position + Vector3.zero;
         Ray ray = new Ray(rayPosition , Vector3.down);
@@ -143,12 +179,13 @@ public class PlayerControl : MonoBehaviour
 
         Debug.DrawRay(rayPosition , Vector3.down * distance , Color.green);
 
+
         //ここで重力計算
-
-
+        var gravity = (isGraund) ? 0.0f : 8.5f;
+        rb.AddForce( Physics.gravity * gravity , ForceMode.Acceleration);
     }
 
-    
+
     private void OnCollisionEnter(Collision other)
     {
         if(other.gameObject.CompareTag("Ground"))
