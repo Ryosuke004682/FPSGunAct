@@ -13841,7 +13841,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh24994
+  m_Name: pb_Mesh24986
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -14013,6 +14013,7 @@ GameObject:
   - component: {fileID: 1507320355}
   - component: {fileID: 1507320354}
   - component: {fileID: 1507320353}
+  - component: {fileID: 1507320358}
   m_Layer: 8
   m_Name: EventObject3
   m_TagString: Untagged
@@ -14332,6 +14333,26 @@ MonoBehaviour:
   m_SelectedFaces: 
   m_SelectedEdges: []
   m_SelectedVertices: 
+--- !u!95 &1507320358
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1507320351}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 2ee4d58a58a8b6d428193bae5b1a8e1a, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!43 &1516047763
 Mesh:
   m_ObjectHideFlags: 0
@@ -18801,10 +18822,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _speed: 2
   _runSpeed: 5
+  airSpeed: 1.5
   _jumpCount: 0
-  _jumpPower: 80
+  _jumpPower: 100
+  _secondJumpPower: 50
   fallSpeed: 2
-  multiplier: 50
+  multiplier: 10
   rotationSpeed: 500
 --- !u!54 &6774320899035411650
 Rigidbody:

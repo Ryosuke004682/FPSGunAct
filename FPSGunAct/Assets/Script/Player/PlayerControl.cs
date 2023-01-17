@@ -40,7 +40,7 @@ public class PlayerControl : MonoBehaviour
     private float rotationSpeed = 500;
 
     bool isJump = false;
-    bool isSecondJump; //２回目のジャンプチェック
+    
     bool isGraund = false;
 
     RaycastHit _hit;
@@ -69,7 +69,26 @@ public class PlayerControl : MonoBehaviour
     {
         PlayerCore();
         Gravity();
-        InputJump();
+
+        if(_jumpCount < _maxJumpCount && Input.GetKeyDown(KeyCode.Space))
+        {
+
+            isJump = true;
+
+            if (_jumpCount == 0)
+            {
+                _anim.SetBool("FirstJump" , true);
+            }
+            else if(_jumpCount == 1)
+            {
+                _anim.SetBool("FirstJump" , false);
+                _anim.SetBool("SecondJump" , true);
+            }
+            else if(_jumpCount == _maxJumpCount)
+            {
+                _anim.SetBool("SecondJump" , false);
+            }
+        }
     }
 
     private void FixedUpdate()
@@ -110,57 +129,11 @@ public class PlayerControl : MonoBehaviour
             rb.velocity = Vector3.zero;
 
             rb.AddForce(Vector3.up * _jumpPower , ForceMode.Impulse);
-            rb.AddForce(fallSpeed * Physics.gravity,ForceMode.Acceleration);
 
             _jumpCount++;
             isJump = false;
         }
     }
-
-    void InputJump()
-    {
-        if (Input.GetKey(KeyCode.Space) && !_anim.GetCurrentAnimatorStateInfo(0).IsName("FirstJump")
-                                        && !_anim.IsInTransition(0))
-        {
-            _anim.SetBool("FirstJump" , true);
-            velocity.y += _jumpPower;
-        }
-        else if(_anim.GetBool("FirstJump") && !isJump && isSecondJump)
-        {
-            var airMove = new Vector3(Input.GetAxis("Horizontal"), 0 , Input.GetAxis("Vertical")).normalized;
-            velocity = new Vector3(airMove.x * airSpeed , velocity.y , airMove.z * airSpeed);
-
-            //二段目のジャンプの処理
-            if(Input.GetKeyDown(KeyCode.Space))
-            {
-                var getAnimTime = Mathf.Repeat(_anim.GetCurrentAnimatorStateInfo(0).normalizedTime , 1.0f);
-
-                if(_anim.GetCurrentAnimatorStateInfo(0).IsName("FirstJump")　&& 0.85f <= getAnimTime && getAnimTime <= 1.1f)
-                {
-                    isJump = true;
-                    _anim.SetBool("FirstJump" , true);
-
-                    transform.LookAt(transform.position + airMove.normalized);
-
-                    velocity.y += _secondJumpPower;
-                }
-                else
-                {
-                    isSecondJump = true;
-                }
-            }
-            else if (isSecondJump)
-            {
-                airMove = new Vector3(Input.GetAxis("Horizontal"), 0f, Input.GetAxis("Vertical")).normalized;
-                velocity = new Vector3(airMove.x * airSpeed , velocity.y , airMove.z * airSpeed);
-            }
-
-            velocity.y += Physics.gravity.y * Time.deltaTime;
-            rb.AddForce(velocity * Time.deltaTime);
-
-        }
-    }
-
 
     //地面かどうかをチェックして、
     //地面なら重力計算をしない。
@@ -181,7 +154,7 @@ public class PlayerControl : MonoBehaviour
 
 
         //ここで重力計算
-        var gravity = (isGraund) ? 0.0f : 8.5f;
+        var gravity = (isGraund) ? 0.0f : 8.0f;
         rb.AddForce( Physics.gravity * gravity , ForceMode.Acceleration);
     }
 
@@ -190,6 +163,7 @@ public class PlayerControl : MonoBehaviour
     {
         if(other.gameObject.CompareTag("Ground"))
         {
+            Debug.Log("True");
             _jumpCount = 0;
         }
     }
