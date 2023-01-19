@@ -17,8 +17,8 @@ public class PlayerControl : MonoBehaviour
 
     private int _maxJumpCount = 2;
 
-    [SerializeField, Header("ジャンプ力(内部で ×1000してるので注意)")]
-    private float _jumpPower = 300.0f;
+    [SerializeField, Header("ジャンプ力")]
+    private float _jumpPower = 5.0f;
 
     [SerializeField, Header("二段ジャンプ用の力")]
     private float _secondJumpPower = 5.0f;
@@ -28,7 +28,6 @@ public class PlayerControl : MonoBehaviour
 
     [SerializeField, Header("重力による落下速度")]
     private float multiplier = 0.0f;
-
 
     //カメラ
     [Header("カメラの設定")]
@@ -44,8 +43,9 @@ public class PlayerControl : MonoBehaviour
 
     Rigidbody rb;
     Animator _anim;
-    Vector3 velocity;
 
+
+    
     Quaternion rotate;
 
     private void Start()
@@ -76,11 +76,15 @@ public class PlayerControl : MonoBehaviour
             }
             else if(_jumpCount == 1)
             {
-                _anim.SetBool("FirstJump" , false);
                 _anim.SetBool("SecondJump" , true);
             }
             else if(_jumpCount == _maxJumpCount)
             {
+                _anim.SetBool("SecondJump" , false);
+            }
+            else
+            {
+                _anim.SetBool("FirstJump"  , false);
                 _anim.SetBool("SecondJump" , false);
             }
         }
@@ -99,54 +103,56 @@ public class PlayerControl : MonoBehaviour
         var horizontalRotate = Quaternion.AngleAxis(Camera.main.transform.eulerAngles.y , Vector3.up);
 
         var velocity = horizontalRotate * new Vector3(horizontal , 0 , vertical).normalized;
-        
-        var branchSpeed = Input.GetKey(KeyCode.LeftShift) ? velocity * _runSpeed : velocity * _speed;
-
+      
         var newRotationSpeed = rotationSpeed * Time.deltaTime;
 
-        rb.velocity = branchSpeed;
-
-
-        if(velocity.sqrMagnitude > 0.5f)
+        if(velocity.sqrMagnitude > 1.0f)
         {
             rotate = Quaternion.LookRotation(velocity,Vector3.up);
         }
 
+        //走る、通常アニメーション
+        //var branchSpeed = Input.GetKey(KeyCode.LeftShift) ? velocity * _runSpeed : velocity * _speed;
+        //rb.velocity = branchSpeed;
+
+        if(Input.GetKey(KeyCode.Space))
+        {
+            var a = velocity * _runSpeed;
+            _anim.SetFloat("Speed" , _runSpeed);
+
+            rb.velocity = a;
+        }
+        else
+        {
+            var b = velocity * _speed;
+            _anim.SetFloat("Speed" , _speed);
+
+            rb.velocity = b;
+        }
+
+
+
+
         transform.rotation = Quaternion.RotateTowards(transform.rotation , rotate , newRotationSpeed);
     }
-    
-    void Jump()
+
+    //地面の接地判定
+    //重力
+    //ジャンプ
+    private void Jump()
     {
-        if (isJump)
+        Vector3 velocity = Vector3.zero;
+
+        if(isJump)
         {
-            var isGraund = Gravity(isGround);
-            var gravityValue = (isGraund) ? 0.0f : multiplier;
-
-            velocity.y = Physics.gravity.y * gravityValue;
-
-            rb.AddForce(Vector3.up * _jumpPower, ForceMode.Impulse);
-            //rb.AddForce( , ForceMode.Acceleration);
             
-            _jumpCount++;
-            isJump = false;
         }
+
+
     }
 
 
-    bool Gravity(bool groundCheck)
-    {
-        var distance = 0.05f;
-
-        Vector3 rayPosition = transform.position + Vector3.zero;
-        Ray ray = new Ray(rayPosition , Vector3.down);
-
-
-        groundCheck = Physics.Raycast(ray,distance);
-       
-        Debug.DrawRay(rayPosition, Vector3.down * distance, Color.green);
-
-        return groundCheck;
-    }
+    
 
     private void OnCollisionEnter(Collision other)
     {

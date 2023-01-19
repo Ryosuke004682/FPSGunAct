@@ -18808,26 +18808,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 8516578734837527016, guid: 489da09eeb4f26b43b53b2db43293ce8, type: 3}
   m_PrefabInstance: {fileID: 8473579545707791848}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &6774320899035411649
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 263676697236157440}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a2cd823965e9a524288501db36286626, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _speed: 2
-  _runSpeed: 5
-  _jumpCount: 0
-  _jumpPower: 20
-  _secondJumpPower: 50
-  fallSpeed: 5
-  multiplier: 5
-  rotationSpeed: 500
 --- !u!54 &6774320899035411650
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -18863,6 +18843,26 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 9041864176658721618, guid: 489da09eeb4f26b43b53b2db43293ce8, type: 3}
   m_PrefabInstance: {fileID: 8473579545707791848}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &6774320899035411656
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 263676697236157440}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2cd823965e9a524288501db36286626, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _speed: 2
+  _runSpeed: 5
+  _jumpCount: 0
+  _jumpPower: 1000
+  _secondJumpPower: 5
+  fallSpeed: 5
+  multiplier: 50
+  rotationSpeed: 500
 --- !u!1001 &8473579545707791848
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -18882,6 +18882,14 @@ PrefabInstance:
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: a72ba09ab4e17914bafa47f61296f5c5, type: 2}
+    - target: {fileID: 3142117554129957160, guid: 489da09eeb4f26b43b53b2db43293ce8, type: 3}
+      propertyPath: m_CullingMode
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3142117554129957160, guid: 489da09eeb4f26b43b53b2db43293ce8, type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7791524850926691610, guid: 489da09eeb4f26b43b53b2db43293ce8, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.325911
