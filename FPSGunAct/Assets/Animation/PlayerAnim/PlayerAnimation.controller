@@ -7,21 +7,18 @@ AnimatorStateTransition:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: 
-  m_Conditions:
-  - m_ConditionMode: 2
-    m_ConditionEvent: SecondJump
-    m_EventTreshold: 0
+  m_Conditions: []
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 3988465521750521952}
   m_Solo: 0
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0.9397358
+  m_TransitionDuration: 0.9
   m_TransitionOffset: 0
-  m_ExitTime: 0.22159453
+  m_ExitTime: 0.22159456
   m_HasExitTime: 1
-  m_HasFixedDuration: 1
+  m_HasFixedDuration: 0
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
@@ -113,7 +110,7 @@ BlendTree:
   - serializedVersion: 2
     m_Motion: {fileID: 3022631490572132066, guid: 57c556627dc6490ba513c1dd363bd639, type: 3}
     m_Threshold: 0.07407408
-    m_Position: {x: -1, y: 1}
+    m_Position: {x: 1, y: 1}
     m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: AnimSpeed_X
@@ -121,7 +118,7 @@ BlendTree:
   - serializedVersion: 2
     m_Motion: {fileID: -6445051068794620715, guid: 29e2e17184984301811411743eb5a7a6, type: 3}
     m_Threshold: 0.09876544
-    m_Position: {x: 2, y: 0}
+    m_Position: {x: -2, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: AnimSpeed_X
@@ -129,7 +126,7 @@ BlendTree:
   - serializedVersion: 2
     m_Motion: {fileID: 3912193001854795070, guid: 8358beb2f94448a0b27fe76d596da74d, type: 3}
     m_Threshold: 0.123456806
-    m_Position: {x: -2, y: 0}
+    m_Position: {x: 2, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: AnimSpeed_X
@@ -137,7 +134,7 @@ BlendTree:
   - serializedVersion: 2
     m_Motion: {fileID: 3773001749021390023, guid: 061a940fc423438484e5974c821c7cfd, type: 3}
     m_Threshold: 0.14814816
-    m_Position: {x: 1, y: 1}
+    m_Position: {x: -1, y: 1}
     m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: AnimSpeed_X
@@ -145,7 +142,7 @@ BlendTree:
   - serializedVersion: 2
     m_Motion: {fileID: -7703214557886622779, guid: ef320846808a404cb56f6335eb71c64d, type: 3}
     m_Threshold: 0.17283952
-    m_Position: {x: -1, y: -1}
+    m_Position: {x: 1, y: -1}
     m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: AnimSpeed_X
@@ -161,7 +158,7 @@ BlendTree:
   - serializedVersion: 2
     m_Motion: {fileID: -6875018086722050847, guid: a43a7a4e501745d09c0ebdff44c297bd, type: 3}
     m_Threshold: 0.22222224
-    m_Position: {x: 1, y: -1}
+    m_Position: {x: -1, y: -1}
     m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: AnimSpeed_X
@@ -252,7 +249,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: SecondJump
-  m_Speed: 1
+  m_Speed: 0.8
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -6374970761614876601}
@@ -265,7 +262,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 654752690505847367, guid: 39f3c3577120424286e753af8818a808, type: 3}
+  m_Motion: {fileID: 7400000, guid: 104059509e5a74a4885f1b0610d0cc92, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 

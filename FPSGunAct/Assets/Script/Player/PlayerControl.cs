@@ -5,16 +5,12 @@ using UnityEngine.UIElements;
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerControl : MonoBehaviour
 {
-
     [Header("Playerの設定")]
     [SerializeField, Header("Playerの通常の速度")]
     private  float _speed = 2.0f;
 
     [SerializeField, Header("Playerの走るスピード")]
     private float _runSpeed = 5.0f;
-
-    [SerializeField, Header("空中にいるときのプレイヤーの移動スピード")]
-    private float airSpeed = 1.5f;
 
     [SerializeField, Header("ジャンプのカウンター")]
     private int _jumpCount = 0;
@@ -31,7 +27,7 @@ public class PlayerControl : MonoBehaviour
     private float fallSpeed = 5.0f;
 
     [SerializeField, Header("重力による落下速度")]
-    private float multiplier = 2.0f;
+    private float multiplier = 0.0f;
 
 
     //カメラ
@@ -40,8 +36,8 @@ public class PlayerControl : MonoBehaviour
     private float rotationSpeed = 500;
 
     bool isJump = false;
-    
-    bool isGraund = false;
+    bool isGround = false;
+
 
     RaycastHit _hit;
     Ray _ray;
@@ -68,7 +64,6 @@ public class PlayerControl : MonoBehaviour
     private void Update()
     {
         PlayerCore();
-        Gravity();
 
         if(_jumpCount < _maxJumpCount && Input.GetKeyDown(KeyCode.Space))
         {
@@ -94,7 +89,6 @@ public class PlayerControl : MonoBehaviour
     private void FixedUpdate()
     {
         Jump();
-        
     }
 
     void PlayerCore()
@@ -119,45 +113,40 @@ public class PlayerControl : MonoBehaviour
         }
 
         transform.rotation = Quaternion.RotateTowards(transform.rotation , rotate , newRotationSpeed);
-
     }
     
     void Jump()
     {
-       if(isJump)
+        if (isJump)
         {
-            rb.velocity = Vector3.zero;
+            var isGraund = Gravity(isGround);
+            var gravityValue = (isGraund) ? 0.0f : multiplier;
 
-            rb.AddForce(Vector3.up * _jumpPower , ForceMode.Impulse);
+            velocity.y = Physics.gravity.y * gravityValue;
 
+            rb.AddForce(Vector3.up * _jumpPower, ForceMode.Impulse);
+            //rb.AddForce( , ForceMode.Acceleration);
+            
             _jumpCount++;
             isJump = false;
         }
     }
 
-    //地面かどうかをチェックして、
-    //地面なら重力計算をしない。
-    //空中なら重力を徐々に掛けていく。
-    //二段ジャンプ後にストンと落としたい。
-    //それに伴って、二段ジャンプにも少し補正を掛ける。
 
-    private void Gravity()
+    bool Gravity(bool groundCheck)
     {
-        var distance = 0.25f;
+        var distance = 0.05f;
 
         Vector3 rayPosition = transform.position + Vector3.zero;
         Ray ray = new Ray(rayPosition , Vector3.down);
 
-        isGraund = Physics.Raycast(ray,distance);
 
-        Debug.DrawRay(rayPosition , Vector3.down * distance , Color.green);
+        groundCheck = Physics.Raycast(ray,distance);
+       
+        Debug.DrawRay(rayPosition, Vector3.down * distance, Color.green);
 
-
-        //ここで重力計算
-        var gravity = (isGraund) ? 0.0f : 8.0f;
-        rb.AddForce( Physics.gravity * gravity , ForceMode.Acceleration);
+        return groundCheck;
     }
-
 
     private void OnCollisionEnter(Collision other)
     {
