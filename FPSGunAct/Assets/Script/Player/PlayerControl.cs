@@ -5,16 +5,12 @@ using UnityEngine.UIElements;
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerControl : MonoBehaviour
 {
-
     [Header("Playerの設定")]
     [SerializeField, Header("Playerの通常の速度")]
     private  float _speed = 2.0f;
 
     [SerializeField, Header("Playerの走るスピード")]
     private float _runSpeed = 5.0f;
-
-    [SerializeField, Header("空中にいるときのプレイヤーの移動スピード")]
-    private float airSpeed = 1.5f;
 
     [SerializeField, Header("ジャンプのカウンター")]
     private int _jumpCount = 0;
@@ -31,7 +27,7 @@ public class PlayerControl : MonoBehaviour
     private float fallSpeed = 5.0f;
 
     [SerializeField, Header("重力による落下速度")]
-    private float multiplier = 2.0f;
+    private float multiplier = 0.0f;
 
 
     //カメラ
@@ -40,8 +36,8 @@ public class PlayerControl : MonoBehaviour
     private float rotationSpeed = 500;
 
     bool isJump = false;
-    bool isSecondJump; //２回目のジャンプチェック
-    bool isGraund = false;
+    bool isGround = false;
+
 
     RaycastHit _hit;
     Ray _ray;
@@ -68,14 +64,31 @@ public class PlayerControl : MonoBehaviour
     private void Update()
     {
         PlayerCore();
-        Gravity();
-        InputJump();
+
+        if(_jumpCount < _maxJumpCount && Input.GetKeyDown(KeyCode.Space))
+        {
+
+            isJump = true;
+
+            if (_jumpCount == 0)
+            {
+                _anim.SetBool("FirstJump" , true);
+            }
+            else if(_jumpCount == 1)
+            {
+                _anim.SetBool("FirstJump" , false);
+                _anim.SetBool("SecondJump" , true);
+            }
+            else if(_jumpCount == _maxJumpCount)
+            {
+                _anim.SetBool("SecondJump" , false);
+            }
+        }
     }
 
     private void FixedUpdate()
     {
         Jump();
-        
     }
 
     void PlayerCore()
@@ -100,96 +113,46 @@ public class PlayerControl : MonoBehaviour
         }
 
         transform.rotation = Quaternion.RotateTowards(transform.rotation , rotate , newRotationSpeed);
-
     }
     
     void Jump()
     {
-       if(isJump)
+        if (isJump)
         {
-            rb.velocity = Vector3.zero;
+            var isGraund = Gravity(isGround);
+            var gravityValue = (isGraund) ? 0.0f : multiplier;
 
-            rb.AddForce(Vector3.up * _jumpPower , ForceMode.Impulse);
-            rb.AddForce(fallSpeed * Physics.gravity,ForceMode.Acceleration);
+            velocity.y = Physics.gravity.y * gravityValue;
 
+            rb.AddForce(Vector3.up * _jumpPower, ForceMode.Impulse);
+            //rb.AddForce( , ForceMode.Acceleration);
+            
             _jumpCount++;
             isJump = false;
         }
     }
 
-    void InputJump()
+
+    bool Gravity(bool groundCheck)
     {
-        if (Input.GetKey(KeyCode.Space) && !_anim.GetCurrentAnimatorStateInfo(0).IsName("FirstJump")
-                                        && !_anim.IsInTransition(0))
-        {
-            _anim.SetBool("FirstJump" , true);
-            velocity.y += _jumpPower;
-        }
-        else if(_anim.GetBool("FirstJump") && !isJump && isSecondJump)
-        {
-            var airMove = new Vector3(Input.GetAxis("Horizontal"), 0 , Input.GetAxis("Vertical")).normalized;
-            velocity = new Vector3(airMove.x * airSpeed , velocity.y , airMove.z * airSpeed);
-
-            //二段目のジャンプの処理
-            if(Input.GetKeyDown(KeyCode.Space))
-            {
-                var getAnimTime = Mathf.Repeat(_anim.GetCurrentAnimatorStateInfo(0).normalizedTime , 1.0f);
-
-                if(_anim.GetCurrentAnimatorStateInfo(0).IsName("FirstJump")　&& 0.85f <= getAnimTime && getAnimTime <= 1.1f)
-                {
-                    isJump = true;
-                    _anim.SetBool("FirstJump" , true);
-
-                    transform.LookAt(transform.position + airMove.normalized);
-
-                    velocity.y += _secondJumpPower;
-                }
-                else
-                {
-                    isSecondJump = true;
-                }
-            }
-            else if (isSecondJump)
-            {
-                airMove = new Vector3(Input.GetAxis("Horizontal"), 0f, Input.GetAxis("Vertical")).normalized;
-                velocity = new Vector3(airMove.x * airSpeed , velocity.y , airMove.z * airSpeed);
-            }
-
-            velocity.y += Physics.gravity.y * Time.deltaTime;
-            rb.AddForce(velocity * Time.deltaTime);
-
-        }
-    }
-
-
-    //地面かどうかをチェックして、
-    //地面なら重力計算をしない。
-    //空中なら重力を徐々に掛けていく。
-    //二段ジャンプ後にストンと落としたい。
-    //それに伴って、二段ジャンプにも少し補正を掛ける。
-
-    private void Gravity()
-    {
-        var distance = 0.25f;
+        var distance = 0.05f;
 
         Vector3 rayPosition = transform.position + Vector3.zero;
         Ray ray = new Ray(rayPosition , Vector3.down);
 
-        isGraund = Physics.Raycast(ray,distance);
 
-        Debug.DrawRay(rayPosition , Vector3.down * distance , Color.green);
+        groundCheck = Physics.Raycast(ray,distance);
+       
+        Debug.DrawRay(rayPosition, Vector3.down * distance, Color.green);
 
-
-        //ここで重力計算
-        var gravity = (isGraund) ? 0.0f : 8.5f;
-        rb.AddForce( Physics.gravity * gravity , ForceMode.Acceleration);
+        return groundCheck;
     }
-
 
     private void OnCollisionEnter(Collision other)
     {
         if(other.gameObject.CompareTag("Ground"))
         {
+            Debug.Log("True");
             _jumpCount = 0;
         }
     }
