@@ -4,9 +4,6 @@ using UnityEngine.UIElements;
 
 namespace Player
 {
-
-
-
     [RequireComponent(typeof(Rigidbody))]
     public class PlayerControl : MonoBehaviour
     {
@@ -41,6 +38,7 @@ namespace Player
 
         bool isJump = false;
         bool isGround = false;
+        
 
 
         RaycastHit _hit;
@@ -116,11 +114,12 @@ namespace Player
                 rotate = Quaternion.LookRotation(velocity, Vector3.up);
             }
 
-            //走る、通常アニメーション
-            //var branchSpeed = Input.GetKey(KeyCode.LeftShift) ? velocity * _runSpeed : velocity * _speed;
-            //rb.velocity = branchSpeed;
+           
+            var branchSpeed = Input.GetKey(KeyCode.LeftShift) ? velocity * _runSpeed : velocity * _speed;
+            rb.velocity = branchSpeed;
 
-            if (Input.GetKey(KeyCode.Space))
+            /*
+            if (Input.GetKey(KeyCode.LeftShift))
             {
                 var a = velocity * _runSpeed;
                 _anim.SetFloat("Speed", _runSpeed);
@@ -129,15 +128,10 @@ namespace Player
             }
             else
             {
-                var b = velocity * _speed;
-                _anim.SetFloat("Speed", _speed);
 
-                rb.velocity = b;
+
             }
-
-
-
-
+            */
             transform.rotation = Quaternion.RotateTowards(transform.rotation, rotate, newRotationSpeed);
         }
 

@@ -3,26 +3,25 @@ using System.Collections.Generic;
 using UnityEngine;
 using Player;
 
-    RequireComponent(typeof(Camera))]
-    public class CameraManager : MonoBehaviour
+public class CameraManager : MonoBehaviour
+{
+    public Camera _camera;
+
+    void CameraWork_Pod()
     {
-        public Camera _camera;
 
-        
-        void CameraWork_Pod()
-        {
-
-        }
-
-        void CameraWork_Player()
-        {
-
-        }
-        
-        void CameraWork_Event()
-        {
-
-        }
     }
+
+    void CameraWork_Player()
+    {
+
+    }
+        
+    void CameraWork_Event()
+    {
+
+    }
+    
+}
 
 

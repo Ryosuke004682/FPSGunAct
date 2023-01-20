@@ -18843,7 +18843,7 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 9041864176658721618, guid: 489da09eeb4f26b43b53b2db43293ce8, type: 3}
   m_PrefabInstance: {fileID: 8473579545707791848}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &6774320899035411656
+--- !u!114 &6774320899035411658
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -18858,10 +18858,10 @@ MonoBehaviour:
   _speed: 2
   _runSpeed: 5
   _jumpCount: 0
-  _jumpPower: 1000
+  _jumpPower: 5
   _secondJumpPower: 5
   fallSpeed: 5
-  multiplier: 50
+  multiplier: 0
   rotationSpeed: 500
 --- !u!1001 &8473579545707791848
 PrefabInstance:
