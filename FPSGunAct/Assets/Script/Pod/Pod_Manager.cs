@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Player;
 
 public class Pod_Manager : MonoBehaviour
 {
    
     Animator _anim;
+    
 
     private void Start()
     {
