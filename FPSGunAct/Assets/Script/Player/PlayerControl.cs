@@ -14,11 +14,6 @@ namespace Player
         [SerializeField, Header("Playerの走るスピード")]
         private float _runSpeed = 5.0f;
 
-        [SerializeField, Header("ジャンプのカウンター")]
-        private int _jumpCount = 0;
-
-        private int _maxJumpCount = 2;
-
         [SerializeField, Header("ジャンプ力")]
         private float _jumpPower = 5.0f;
 
@@ -28,26 +23,32 @@ namespace Player
         [SerializeField, Header("重力")]
         private float fallSpeed = 5.0f;
 
-        [SerializeField, Header("重力による落下速度")]
-        private float multiplier = 0.0f;
+        [SerializeField, Header("ジャンプ")]
+        private int _jumpCount = 0;
+
+        LayerMask groundLayer = 0;
+
+
+        private float groundDistance = 0.1f;
 
         //カメラ
         [Header("カメラの設定")]
         [SerializeField, Header("カメラの回転量")]
         private float rotationSpeed = 500;
 
-        bool isJump = false;
-        bool isGround = false;
         
+        const int MAXJUMPCOUNT = 2;
 
+        bool isJump_Frag;
+        bool isSecondJump_Flag;
+        bool isJump;
+        bool isGround;
 
         RaycastHit _hit;
         Ray _ray;
 
         Rigidbody rb;
         Animator _anim;
-
-
 
         Quaternion rotate;
 
@@ -67,35 +68,12 @@ namespace Player
         private void Update()
         {
             PlayerCore();
-
-            if (_jumpCount < _maxJumpCount && Input.GetKeyDown(KeyCode.Space))
-            {
-
-                isJump = true;
-
-                if (_jumpCount == 0)
-                {
-                    _anim.SetBool("FirstJump", true);
-                }
-                else if (_jumpCount == 1)
-                {
-                    _anim.SetBool("SecondJump", true);
-                }
-                else if (_jumpCount == _maxJumpCount)
-                {
-                    _anim.SetBool("SecondJump", false);
-                }
-                else
-                {
-                    _anim.SetBool("FirstJump", false);
-                    _anim.SetBool("SecondJump", false);
-                }
-            }
+            Jump();
         }
 
         private void FixedUpdate()
         {
-            Jump();
+           
         }
 
         void PlayerCore()
@@ -114,44 +92,64 @@ namespace Player
                 rotate = Quaternion.LookRotation(velocity, Vector3.up);
             }
 
+            _anim.SetFloat("Speed", velocity.sqrMagnitude);
+
            
-            var branchSpeed = Input.GetKey(KeyCode.LeftShift) ? velocity * _runSpeed : velocity * _speed;
-            rb.velocity = branchSpeed;
-
-            /*
-            if (Input.GetKey(KeyCode.LeftShift))
+            if(Input.GetKey(KeyCode.LeftShift))
             {
-                var a = velocity * _runSpeed;
-                _anim.SetFloat("Speed", _runSpeed);
+                var runSpeed = velocity * _runSpeed;
+                rb.velocity = runSpeed;
 
-                rb.velocity = a;
+                _anim.SetBool("SprintSpeed" , true);
             }
             else
             {
+                var nomalSpeed = velocity * _speed;
+                rb.velocity = nomalSpeed;
 
-
+                _anim.SetBool("SprintSpeed" , false);
             }
-            */
+
             transform.rotation = Quaternion.RotateTowards(transform.rotation, rotate, newRotationSpeed);
         }
 
-        //地面の接地判定
         //重力
         //ジャンプ
         private void Jump()
         {
-            Vector3 velocity = Vector3.zero;
+            Vector3 velocity = Vector3.up;
 
-            if (isJump)
+            if (Input.GetKeyDown(KeyCode.Space) &&  _jumpCount < MAXJUMPCOUNT )
             {
+                isJump_Frag = true;
+                isSecondJump_Flag = false;
 
+                //ジャンプ力
+                rb.AddForce(velocity * _jumpPower , ForceMode.Impulse);
+
+                _anim.SetBool("Jump" , true);
+                _jumpCount++;
+
+
+                if(_jumpCount == MAXJUMPCOUNT && isJump_Frag == true)
+                {
+
+                    isSecondJump_Flag = true;
+
+                    rb.AddForce(velocity * _secondJumpPower , ForceMode.Impulse);
+
+                    _anim.SetBool("SecondJump" , true);
+                }
             }
+            else
+            {
+                isJump_Frag = false;
+                isSecondJump_Flag = false;
 
-
+                _anim.SetBool("Jump" , false);
+                _anim.SetBool("SecondJump" , false);
+            }
         }
-
-
-
 
         private void OnCollisionEnter(Collision other)
         {
