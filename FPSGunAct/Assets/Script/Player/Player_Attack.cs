@@ -2,8 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Attack
-{
     [RequireComponent(typeof(Animator))]
     public class Player_Attack : MonoBehaviour
     {
@@ -13,7 +11,6 @@ namespace Attack
         private void Start()
         {
             _anim = GetComponent<Animator>();
-            //_anim.SetBool("Attack", false);
         }
 
         private void Update()
@@ -23,7 +20,7 @@ namespace Attack
 
         private void AnimAttack()
         {
-            if (Input.GetMouseButton(0))
+            if (Input.GetMouseButtonDown(0))
             {
                 _anim.SetBool("Attack", true);
             }
@@ -32,6 +29,4 @@ namespace Attack
                 _anim.SetBool("Attack" , false);
             }
         }
-
     }
-}

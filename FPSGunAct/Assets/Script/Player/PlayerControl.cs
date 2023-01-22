@@ -69,6 +69,7 @@ namespace Player
         {
             PlayerCore();
             Jump();
+
         }
 
         private void FixedUpdate()
