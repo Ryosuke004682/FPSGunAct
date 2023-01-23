@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class Pod_Attack : MonoBehaviour
 {
-    
-
     [SerializeField, Header("弾の射出スピード"),Tooltip("弾の速度")]
     protected float inJect = 10.0f;
 

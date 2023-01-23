@@ -33,9 +33,6 @@ namespace Event
             StartCoroutine(Event());
         }
 
-        //処理が終わるまでの時間を計測して、
-        //計測した時間をEventEndに保持させたい。
-
         public IEnumerator Event()
         {
             yield return null;

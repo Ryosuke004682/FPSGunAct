@@ -26,9 +26,10 @@ namespace Player
         [SerializeField, Header("ジャンプ")]
         private int _jumpCount = 0;
 
+        const int MAXJUMPCOUNT = 2;
+
+
         LayerMask groundLayer = 0;
-
-
         private float groundDistance = 0.1f;
 
         //カメラ
@@ -36,13 +37,17 @@ namespace Player
         [SerializeField, Header("カメラの回転量")]
         private float rotationSpeed = 500;
 
-        
-        const int MAXJUMPCOUNT = 2;
-
+        //**ジャンプ判定**
         bool isJump_Frag;
         bool isSecondJump_Flag;
         bool isJump;
         bool isGround;
+
+
+        //**攻撃判定**
+        bool isAttack;
+        bool isHit;
+
 
         RaycastHit _hit;
         Ray _ray;
@@ -69,7 +74,7 @@ namespace Player
         {
             PlayerCore();
             Jump();
-
+            Attack();
         }
 
         private void FixedUpdate()
@@ -151,6 +156,21 @@ namespace Player
                 _anim.SetBool("SecondJump" , false);
             }
         }
+
+        void Attack()
+        {
+            if(Input.GetMouseButton(0))
+            {
+                isAttack = true;
+                _anim.SetBool("Attack" , true);
+            }
+            else
+            {
+                isAttack = false;
+                _anim.SetBool("Attack", false);
+            }
+        }
+
 
         private void OnCollisionEnter(Collision other)
         {

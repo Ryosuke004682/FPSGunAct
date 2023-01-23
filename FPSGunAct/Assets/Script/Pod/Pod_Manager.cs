@@ -5,9 +5,7 @@ using Player;
 
 public class Pod_Manager : MonoBehaviour
 {
-   
     Animator _anim;
-    
 
     private void Start()
     {
