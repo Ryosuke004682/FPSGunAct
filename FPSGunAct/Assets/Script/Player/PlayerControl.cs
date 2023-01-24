@@ -47,13 +47,10 @@ namespace Player
         //**çUåÇîªíË**
         bool isAttack;
         bool isHit;
-
-
-        RaycastHit _hit;
-        Ray _ray;
-
+        
         Rigidbody rb;
         Animator _anim;
+        public Collider attackCollider;
 
         Quaternion rotate;
 
@@ -95,7 +92,8 @@ namespace Player
 
             if (velocity.sqrMagnitude > 1.0f)
             {
-                rotate = Quaternion.LookRotation(velocity, Vector3.up);
+                rotate = Quaternion.LookRotation(velocity);
+                transform.rotation = Quaternion.Lerp(transform.rotation , rotate , Time.deltaTime * 20);
             }
 
             _anim.SetFloat("Speed", velocity.sqrMagnitude);
@@ -159,15 +157,34 @@ namespace Player
 
         void Attack()
         {
-            if(Input.GetMouseButton(0))
+            if (Input.GetMouseButtonDown(0) && isAttack == false)
             {
                 isAttack = true;
-                _anim.SetBool("Attack" , true);
+                _anim.SetBool("Attack", true);
             }
-            else
+            else if(Input.GetMouseButtonUp(0))
             {
                 isAttack = false;
-                _anim.SetBool("Attack", false);
+                _anim.SetBool("Attack" , false);
+            }
+        }
+
+        public void OffCollider()
+        {
+            attackCollider.enabled = false;
+        }
+
+        public void OnCollider()
+        {
+            attackCollider.enabled = true;
+        }
+
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.gameObject.CompareTag("Enemy") || other.gameObject.CompareTag("Enemy2") && isHit == false)
+            {
+                Debug.Log("ìñÇΩÇ¡ÇƒÇÈÇÊÅ`ÇÒ");
             }
         }
 

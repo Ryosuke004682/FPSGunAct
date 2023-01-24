@@ -1977,6 +1977,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7791524850926691610}
+  - component: {fileID: 8675056958170180768}
   m_Layer: 0
   m_Name: Sword
   m_TagString: Untagged
@@ -2003,6 +2004,19 @@ Transform:
   m_Father: {fileID: 5301874776539644480}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 39.478, z: 96.805}
+--- !u!65 &8675056958170180768
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7452012893667426208}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.15550444, y: 0.15013605, z: 0.8714545}
+  m_Center: {x: 0.002712388, y: -0.004217386, z: 0.29427144}
 --- !u!1 &7480422379903806494
 GameObject:
   m_ObjectHideFlags: 0
