@@ -17473,6 +17473,18 @@ BoxCollider:
   m_CorrespondingSourceObject: {fileID: 8675056958170180768, guid: 489da09eeb4f26b43b53b2db43293ce8, type: 3}
   m_PrefabInstance: {fileID: 8473579545707791848}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1806947014
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1806947009}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b984133c14af33040892dec6e936b57e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!43 &1811355821
 Mesh:
   m_ObjectHideFlags: 0
