@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -5,11 +6,11 @@ using UnityEngine;
 
 public class Enemy_Damage : Damage_Master
 {
-    
+    Animator _anim;
 
     void Start()
     {
-
+        _anim = GetComponent<Animator>();
     }
 
     private void Update()
@@ -24,9 +25,14 @@ public class Enemy_Damage : Damage_Master
 
     private void OnCollisionEnter(Collision other)
     {
-        if (other.gameObject.CompareTag("Sword"))
+        if(other.gameObject.CompareTag("Sword") ||
+           other.gameObject.CompareTag("Bullet"))
         {
-            Debug.Log("OK");
+            _anim.SetInteger("GiveDamage", UnityEngine.Random.Range(1 , 5)) ;
+        }
+        else
+        {
+            _anim.SetInteger("GiveDamage" , 0);
         }
     }
 }
