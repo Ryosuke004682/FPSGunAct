@@ -9,6 +9,7 @@ TagManager:
   - Position
   - Ground
   - Enemy2
+  - Sword
   layers:
   - Default
   - TransparentFX
@@ -19,7 +20,7 @@ TagManager:
   - Player
   - Bullet
   - Ground
-  - 
+  - Sword
   - 
   - 
   - 

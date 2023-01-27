@@ -40,7 +40,6 @@ namespace Player
         //**ジャンプ判定**
         bool isJump_Frag;
         bool isSecondJump_Flag;
-        bool isJump;
         bool isGround;
 
 
@@ -126,7 +125,6 @@ namespace Player
             if (Input.GetKeyDown(KeyCode.Space) &&  _jumpCount < MAXJUMPCOUNT )
             {
                 isJump_Frag = true;
-                isSecondJump_Flag = false;
 
                 //ジャンプ力
                 rb.AddForce(velocity * _jumpPower , ForceMode.Impulse);
@@ -147,8 +145,8 @@ namespace Player
             }
             else
             {
-                isJump_Frag = false;
-                isSecondJump_Flag = false;
+                //isJump_Frag = false;
+                //isSecondJump_Flag = false;
 
                 _anim.SetBool("Jump" , false);
                 _anim.SetBool("SecondJump" , false);
