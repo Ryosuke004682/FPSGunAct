@@ -23,19 +23,19 @@ public class EnemyController : MonoBehaviour
         
     }
 
-    private void OnCollisionEnter(Collision other)
-    {
-        if (other.gameObject.CompareTag("Sword"))
-        {
-            Debug.Log("OK");
-            hit = true;
+    //private void OnCollisionEnter(Collision other)
+    //{
+    //    if (other.gameObject.CompareTag("Sword"))
+    //    {
+    //        Debug.Log("OK");
+    //        hit = true;
 
-            _anim.SetInteger("GiveDamage", Random.Range(1, 4));
-        }
-        else
-        {
-            _anim.SetInteger("GiveDamage" , 0);
-        }
-    }
+    //        _anim.SetInteger("GiveDamage", Random.Range(1, 4));
+    //    }
+    //    else
+    //    {
+    //        _anim.SetInteger("GiveDamage" , 0);
+    //    }
+    //}
 
 }
