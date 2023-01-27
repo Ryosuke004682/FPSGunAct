@@ -1,16 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
-public class Player_Damege : Damage_Master
+public class Enemy_Damage : Damage_Master
 {
-    bool hit = false;
+    
 
-    private void Start()
+    void Start()
     {
-        
-    }
 
+    }
 
     private void Update()
     {
@@ -24,11 +24,9 @@ public class Player_Damege : Damage_Master
 
     private void OnCollisionEnter(Collision other)
     {
-        if(other.gameObject.CompareTag("Enemy") || other.gameObject.CompareTag("Enemy2"))
+        if (other.gameObject.CompareTag("Sword"))
         {
-            hit = true;
-            Debug.Log("ìñÇΩÇ¡ÇƒÇÈÇÊÅ`ÇÒ");
+            Debug.Log("OK");
         }
     }
-
 }

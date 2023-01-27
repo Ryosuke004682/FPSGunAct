@@ -5,7 +5,8 @@ using UnityEngine;
 public class EnemyController : MonoBehaviour
 {
     Animator _anim;
-   
+
+    bool hit = false;
 
     private void Start()
     {
@@ -22,9 +23,19 @@ public class EnemyController : MonoBehaviour
         
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnCollisionEnter(Collision other)
     {
-        
+        if (other.gameObject.CompareTag("Sword"))
+        {
+            Debug.Log("OK");
+            hit = true;
+
+            _anim.SetInteger("GiveDamage", Random.Range(1, 4));
+        }
+        else
+        {
+            _anim.SetInteger("GiveDamage" , 0);
+        }
     }
 
 }
