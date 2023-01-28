@@ -64,6 +64,7 @@ namespace Player
             rb.freezeRotation = true;
 
             rotate = transform.rotation;
+
         }
 
         private void Update()
@@ -176,8 +177,6 @@ namespace Player
         {
             attackCollider.enabled = true;
         }
-
-
         private void OnTriggerEnter(Collider other)
         {
             if (other.gameObject.CompareTag("Enemy") || other.gameObject.CompareTag("Enemy2") && isHit == false)
