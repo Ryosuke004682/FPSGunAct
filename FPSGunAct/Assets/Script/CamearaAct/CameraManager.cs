@@ -1,27 +1,26 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Player;
+using Cinemachine;
 
-public class CameraManager : MonoBehaviour
+public class CameraManager : CinemachineExtension
 {
-    public Camera _camera;
-
-    void CameraWork_Pod()
-    {
-
-    }
-
-    void CameraWork_Player()
-    {
-
-    }
-        
-    void CameraWork_Event()
-    {
-
-    }
+    //とりあえず、ジャンプしたときの画角を変えてみる。
     
+    [SerializeField, Header("カメラワークの最小画角")]
+    private int minAngle = 10;
+
+    [SerializeField, Header("カメラワークの最大画角")]
+    private int maxAngle = 80;
+
+
+    protected override void PostPipelineStageCallback(CinemachineVirtualCameraBase vcam 
+        , CinemachineCore.Stage stage 
+        , ref CameraState state 
+        , float deltaTime)
+    {
+        Debug.Log($"stage = {stage}");
+    }
 }
 
 
