@@ -1,3 +1,4 @@
+using Cinemachine;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -37,6 +38,16 @@ namespace Player
         [SerializeField, Header("カメラの回転量")]
         private float rotationSpeed = 500;
 
+        [SerializeField, Header("メインカメラ")]
+        public CinemachineVirtualCamera mainCam;
+
+        [SerializeField, Header("最初のジャンプのカメラワーク")]
+        public CinemachineVirtualCamera firstJumpCam;
+
+        [Header("二段ジャンプ目のカメラワーク")]
+        public CinemachineVirtualCamera secondJumpCam;
+
+
         //**ジャンプ判定**
         bool isJump_Frag;
         bool isSecondJump_Flag;
@@ -64,6 +75,8 @@ namespace Player
             rb.freezeRotation = true;
 
             rotate = transform.rotation;
+
+            Debug.Log($"mainCam.Priority = {mainCam.Priority}");
 
         }
 
@@ -133,8 +146,10 @@ namespace Player
                 _anim.SetBool("Jump" , true);
                 _jumpCount++;
 
+                firstJumpCam.Priority = mainCam.Priority - 1;
+                Debug.Log($"firstJumpCam.Priority = { firstJumpCam.Priority}");
 
-                if(_jumpCount == MAXJUMPCOUNT && isJump_Frag == true)
+                if (_jumpCount == MAXJUMPCOUNT && isJump_Frag == true)
                 {
 
                     isSecondJump_Flag = true;
@@ -142,15 +157,17 @@ namespace Player
                     rb.AddForce(velocity * _secondJumpPower , ForceMode.Impulse);
 
                     _anim.SetBool("SecondJump" , true);
+
+                    secondJumpCam.Priority = firstJumpCam.Priority - 1;
+                    Debug.Log($"SecondJumpCam.Priority = {secondJumpCam.Priority}");
                 }
             }
             else
             {
-                //isJump_Frag = false;
-                //isSecondJump_Flag = false;
-
                 _anim.SetBool("Jump" , false);
                 _anim.SetBool("SecondJump" , false);
+                mainCam.Priority = secondJumpCam.Priority + 2;
+                Debug.Log($"mainCam.Priority = { mainCam.Priority}");
             }
         }
 
