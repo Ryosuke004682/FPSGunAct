@@ -44,10 +44,6 @@ namespace Player
         [SerializeField, Header("最初のジャンプのカメラワーク")]
         public CinemachineVirtualCamera firstJumpCam;
 
-        [Header("二段ジャンプ目のカメラワーク")]
-        public CinemachineVirtualCamera secondJumpCam;
-
-
         //**ジャンプ判定**
         bool isJump_Frag;
         bool isSecondJump_Flag;
@@ -63,6 +59,7 @@ namespace Player
         public Collider attackCollider;
 
         Quaternion rotate;
+        public GameObject playerHolder;
 
         private void Start()
         {
@@ -76,8 +73,6 @@ namespace Player
 
             rotate = transform.rotation;
 
-            Debug.Log($"mainCam.Priority = {mainCam.Priority}");
-
         }
 
         private void Update()
@@ -85,20 +80,20 @@ namespace Player
             PlayerCore();
             Jump();
             Attack();
+            PlayerCamera();
         }
 
         private void FixedUpdate()
         {
            
         }
-
         void PlayerCore()
         {
             var vertical = Input.GetAxis("Vertical");
             var horizontal = Input.GetAxis("Horizontal");
 
             var horizontalRotate = Quaternion.AngleAxis(Camera.main.transform.eulerAngles.y, Vector3.up);
-
+            
             var velocity = horizontalRotate * new Vector3(horizontal, 0, vertical).normalized;
 
             var newRotationSpeed = rotationSpeed * Time.deltaTime;
@@ -130,6 +125,15 @@ namespace Player
             transform.rotation = Quaternion.RotateTowards(transform.rotation, rotate, newRotationSpeed);
         }
 
+        void PlayerCamera()
+        {
+            var angle = Input.GetAxis("Horizontal") * rotationSpeed;
+
+            var playerPosition = playerHolder.transform.position;
+
+            transform.RotateAround(playerPosition , Vector3.up,angle);
+        }
+
         //重力
         //ジャンプ
         private void Jump()
@@ -146,7 +150,9 @@ namespace Player
                 _anim.SetBool("Jump" , true);
                 _jumpCount++;
 
-                firstJumpCam.Priority = mainCam.Priority - 1;
+
+                mainCam.Priority = 0;
+                firstJumpCam.Priority = 19;
                 Debug.Log($"firstJumpCam.Priority = { firstJumpCam.Priority}");
 
                 if (_jumpCount == MAXJUMPCOUNT && isJump_Frag == true)
@@ -157,18 +163,14 @@ namespace Player
                     rb.AddForce(velocity * _secondJumpPower , ForceMode.Impulse);
 
                     _anim.SetBool("SecondJump" , true);
-
-                    secondJumpCam.Priority = firstJumpCam.Priority - 1;
-                    Debug.Log($"SecondJumpCam.Priority = {secondJumpCam.Priority}");
                 }
             }
             else
             {
                 _anim.SetBool("Jump" , false);
                 _anim.SetBool("SecondJump" , false);
-                mainCam.Priority = secondJumpCam.Priority + 2;
-                Debug.Log($"mainCam.Priority = { mainCam.Priority}");
             }
+          
         }
 
         void Attack()
@@ -208,6 +210,7 @@ namespace Player
             if (other.gameObject.CompareTag("Ground"))
             {
                 Debug.Log("True");
+                mainCam.Priority = 20;
                 _jumpCount = 0;
             }
         }
