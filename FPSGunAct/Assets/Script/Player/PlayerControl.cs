@@ -44,6 +44,7 @@ namespace Player
         [SerializeField, Header("最初のジャンプのカメラワーク")]
         public CinemachineVirtualCamera firstJumpCam;
 
+  
         //**ジャンプ判定**
         bool isJump_Frag;
         bool isSecondJump_Flag;
@@ -72,7 +73,6 @@ namespace Player
             rb.freezeRotation = true;
 
             rotate = transform.rotation;
-
         }
 
         private void Update()
@@ -87,6 +87,7 @@ namespace Player
         {
            
         }
+
         void PlayerCore()
         {
             var vertical = Input.GetAxis("Vertical");
@@ -170,7 +171,6 @@ namespace Player
                 _anim.SetBool("Jump" , false);
                 _anim.SetBool("SecondJump" , false);
             }
-          
         }
 
         void Attack()
@@ -214,5 +214,7 @@ namespace Player
                 _jumpCount = 0;
             }
         }
+
+
     }
 }
