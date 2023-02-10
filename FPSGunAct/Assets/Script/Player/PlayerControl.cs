@@ -31,6 +31,7 @@ namespace Player
 
 
         LayerMask groundLayer = 0;
+        AudioSource _source;
         private float groundDistance = 0.1f;
 
         //ÉJÉÅÉâ
@@ -66,6 +67,8 @@ namespace Player
         {
             UnityEngine.Cursor.lockState = CursorLockMode.Locked;
             UnityEngine.Cursor.visible = true;
+
+            _source = GetComponent<AudioSource>();
 
             _anim = GetComponent<Animator>();
 
@@ -195,6 +198,7 @@ namespace Player
         public void OnCollider()
         {
             attackCollider.enabled = true;
+
         }
         private void OnTriggerEnter(Collider other)
         {
