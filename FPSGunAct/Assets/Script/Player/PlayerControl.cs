@@ -31,6 +31,7 @@ namespace Player
 
 
         LayerMask groundLayer = 0;
+        AudioSource _source;
         private float groundDistance = 0.1f;
 
         //カメラ
@@ -67,6 +68,8 @@ namespace Player
             UnityEngine.Cursor.lockState = CursorLockMode.Locked;
             UnityEngine.Cursor.visible = true;
 
+            _source = GetComponent<AudioSource>();
+
             _anim = GetComponent<Animator>();
 
             rb = GetComponent<Rigidbody>();
@@ -80,7 +83,7 @@ namespace Player
             PlayerCore();
             Jump();
             Attack();
-            PlayerCamera();
+           
         }
 
         private void FixedUpdate()
@@ -126,14 +129,6 @@ namespace Player
             transform.rotation = Quaternion.RotateTowards(transform.rotation, rotate, newRotationSpeed);
         }
 
-        void PlayerCamera()
-        {
-            var angle = Input.GetAxis("Horizontal") * rotationSpeed;
-
-            var playerPosition = playerHolder.transform.position;
-
-            transform.RotateAround(playerPosition , Vector3.up,angle);
-        }
 
         //重力
         //ジャンプ
@@ -195,6 +190,7 @@ namespace Player
         public void OnCollider()
         {
             attackCollider.enabled = true;
+
         }
         private void OnTriggerEnter(Collider other)
         {
