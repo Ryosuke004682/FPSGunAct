@@ -83,7 +83,7 @@ namespace Player
             PlayerCore();
             Jump();
             Attack();
-            PlayerCamera();
+           
         }
 
         private void FixedUpdate()
@@ -129,14 +129,6 @@ namespace Player
             transform.rotation = Quaternion.RotateTowards(transform.rotation, rotate, newRotationSpeed);
         }
 
-        void PlayerCamera()
-        {
-            var angle = Input.GetAxis("Horizontal") * rotationSpeed;
-
-            var playerPosition = playerHolder.transform.position;
-
-            transform.RotateAround(playerPosition , Vector3.up,angle);
-        }
 
         //èdóÕ
         //ÉWÉÉÉìÉv
