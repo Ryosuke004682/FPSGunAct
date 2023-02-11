@@ -12,9 +12,9 @@ public class Game_Event2 : MonoBehaviour
     [SerializeField, Header("アニメーターのパラメータを入れるとこ")]
     private string stateParameterName = "";
 
-    Animator anim;
-    AudioSource source;
-    public AudioClip clip;
+    private Animator anim;
+    private AudioSource source;
+    public  AudioClip clip;
 
     private void Start()
     {
