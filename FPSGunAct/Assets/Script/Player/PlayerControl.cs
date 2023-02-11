@@ -5,6 +5,7 @@ using UnityEngine.UIElements;
 
 namespace Player
 {
+
     [RequireComponent(typeof(Rigidbody))]
     public class PlayerControl : MonoBehaviour
     {
@@ -32,11 +33,10 @@ namespace Player
 
         public Collider attackCollider;
 
-
         //カメラ設定
         [Header("カメラの設定")]
         [SerializeField, Header("カメラの回転量")]
-        private float rotationSpeed = 500;
+        public float rotationSpeed = 500;
 
         [SerializeField, Header("メインカメラ")]
         public CinemachineVirtualCamera mainCam;
@@ -53,7 +53,7 @@ namespace Player
         [SerializeField, Header("二段ジャンプ目の力")]
         private float _secondJumpPower = 5.0f;
 
-        private int _jumpCount = 0;
+        public int _jumpCount = 0;
         const int MAXJUMPCOUNT = 2;
         bool isJump_Frag;
         bool isSecondJump_Flag;
@@ -89,6 +89,7 @@ namespace Player
             PlayerCore();
             Jump();
             Attack();
+            
         }
 
         private void FixedUpdate()
@@ -134,12 +135,36 @@ namespace Player
             transform.rotation = Quaternion.RotateTowards(transform.rotation, rotate, newRotationSpeed);
         }
 
+        //public void Angle()
+        //{
+        //    /// <summary>
+        //    /// ジャンプしたときにカメラの動機に問題が出たため、
+        //    /// MainのPOVの値をsecondの方に同期させる。
+        //    /// </summary>
+        //        var newMainX = mainCam.GetCinemachineComponent<CinemachinePOV>().m_VerticalAxis.Value;
+        //        var newMainY = mainCam.GetCinemachineComponent<CinemachinePOV>().m_HorizontalAxis.Value;
+
+        //        var newSecondX = secondJumpCam.GetCinemachineComponent<CinemachinePOV>().m_VerticalAxis.Value;
+        //        var newSecondY = secondJumpCam.GetCinemachineComponent<CinemachinePOV>().m_HorizontalAxis.Value;
+
+        //        newSecondX = newMainX;
+        //        newSecondY = newMainY;
+        //}
 
         //重力
         //ジャンプ
         private void Jump()
         {
             Vector3 velocity = Vector3.up;
+
+            var newMainX = mainCam.GetCinemachineComponent<CinemachinePOV>().m_VerticalAxis.Value;
+            var newMainY = mainCam.GetCinemachineComponent<CinemachinePOV>().m_HorizontalAxis.Value;
+
+            var newSecondX = secondJumpCam.GetCinemachineComponent<CinemachinePOV>().m_VerticalAxis.Value * newMainX;
+            var newSecondY = secondJumpCam.GetCinemachineComponent<CinemachinePOV>().m_HorizontalAxis.Value * newMainY;
+
+                
+
 
             if (Input.GetKeyDown(KeyCode.Space) &&  _jumpCount < MAXJUMPCOUNT )
             {
@@ -154,8 +179,11 @@ namespace Player
 
                 mainCam.Priority = 0;
                 secondJumpCam.Priority = 19;
-                Debug.Log($"firstJumpCam.Priority = { secondJumpCam.Priority}");
 
+               
+                
+                Debug.Log($"firstJumpCam.Priority = { secondJumpCam.Priority}");
+                
                 if (_jumpCount == MAXJUMPCOUNT && isJump_Frag == true)
                 {
 
@@ -173,10 +201,7 @@ namespace Player
             }
         }
 
-        private void Angle()
-        {
-            var cam = secondJumpCam.GetCinemachineComponent(CinemachineCore.Stage.Aim).GetComponent<CinemachinePOV>().m_VerticalAxis.Value;
-        }
+      
 
 
         void Attack()
@@ -208,7 +233,7 @@ namespace Player
             if (other.gameObject.CompareTag("Enemy") || other.gameObject.CompareTag("Enemy2") && isHit == false)
             {
                 //ここにダメージ処理
-                Debug.Log("当たってるよ～ん");
+                Debug.Log("OK");
             }
         }
 
@@ -223,4 +248,6 @@ namespace Player
             }
         }
     }
+
+    
 }

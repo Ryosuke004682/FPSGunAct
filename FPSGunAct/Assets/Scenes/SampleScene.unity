@@ -517,13 +517,13 @@ MonoBehaviour:
   m_SelectedFaces: 
   m_SelectedEdges: []
   m_SelectedVertices: 
---- !u!43 &43391913
+--- !u!43 &35922941
 Mesh:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh26562
+  m_Name: pb_Mesh25784
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -2913,7 +2913,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 169935365}
   m_LocalRotation: {x: 0.08715574, y: -0, z: -0, w: 0.9961947}
-  m_LocalPosition: {x: 0.3870058, y: 1.590188, z: -3.3300858}
+  m_LocalPosition: {x: 0.38686943, y: 1.590188, z: -3.3300858}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -10292,7 +10292,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   m_LocalRotation: {x: 0.08715574, y: 0, z: 0, w: 0.9961947}
-  m_LocalPosition: {x: 12.038508, y: 2.5926154, z: -8.616544}
+  m_LocalPosition: {x: 12.038372, y: 2.5926154, z: -8.616544}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -12526,7 +12526,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!82 &1008649217
 AudioSource:
   m_ObjectHideFlags: 0
@@ -12534,7 +12534,7 @@ AudioSource:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1008649216}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 4e983266bded98348b91c1acbd9a72c6, type: 3}
@@ -14561,7 +14561,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1168961218}
-  m_Mesh: {fileID: 43391913}
+  m_Mesh: {fileID: 35922941}
 --- !u!23 &1168961222
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -14842,8 +14842,8 @@ MonoBehaviour:
     m_AreaError: 15
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
-  m_Mesh: {fileID: 43391913}
-  m_VersionIndex: 2384
+  m_Mesh: {fileID: 35922941}
+  m_VersionIndex: 2387
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -20608,6 +20608,7 @@ MonoBehaviour:
   secondJumpCam: {fileID: 2103326186}
   _jumpPower: 20
   _secondJumpPower: 40
+  _jumpCount: 0
 --- !u!82 &6774320899035411658
 AudioSource:
   m_ObjectHideFlags: 0
