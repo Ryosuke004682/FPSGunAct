@@ -15,26 +15,25 @@ namespace Player
         [SerializeField, Header("Playerの走るスピード")]
         private float _runSpeed = 5.0f;
 
-        [SerializeField, Header("ジャンプ力")]
-        private float _jumpPower = 5.0f;
-
-        [SerializeField, Header("二段ジャンプ用の力")]
-        private float _secondJumpPower = 5.0f;
-
         [SerializeField, Header("重力")]
         private float fallSpeed = 5.0f;
 
-        [SerializeField, Header("ジャンプ")]
-        private int _jumpCount = 0;
 
-        const int MAXJUMPCOUNT = 2;
+        //**攻撃、防御のパラメーター設定**
+        [Header("攻撃の事、防御力の事")]
+        [SerializeField, Tooltip("攻撃力")]
+        private int _attackPower = 50;
+
+        [SerializeField, Tooltip("防御力")]
+        private int _defence = 20;
+
+        bool isAttack;
+        bool isHit;
+
+        public Collider attackCollider;
 
 
-        LayerMask groundLayer = 0;
-        AudioSource _source;
-        private float groundDistance = 0.1f;
-
-        //カメラ
+        //カメラ設定
         [Header("カメラの設定")]
         [SerializeField, Header("カメラの回転量")]
         private float rotationSpeed = 500;
@@ -43,25 +42,32 @@ namespace Player
         public CinemachineVirtualCamera mainCam;
 
         [SerializeField, Header("最初のジャンプのカメラワーク")]
-        public CinemachineVirtualCamera firstJumpCam;
+        public CinemachineVirtualCamera secondJumpCam;
 
-  
+
         //**ジャンプ判定**
+        [Header("ジャンプの設定")]
+        [SerializeField, Header("ジャンプ力")]
+        private float _jumpPower = 5.0f;
+
+        [SerializeField, Header("二段ジャンプ目の力")]
+        private float _secondJumpPower = 5.0f;
+
+        private int _jumpCount = 0;
+        const int MAXJUMPCOUNT = 2;
         bool isJump_Frag;
         bool isSecondJump_Flag;
         bool isGround;
 
+        //**接地判定**
+        LayerMask groundLayer = 0;
+        private float groundDistance = 0.1f;
 
-        //**攻撃判定**
-        bool isAttack;
-        bool isHit;
         
+        AudioSource _source;
         Rigidbody rb;
         Animator _anim;
-        public Collider attackCollider;
-
         Quaternion rotate;
-        public GameObject playerHolder;
 
         private void Start()
         {
@@ -83,7 +89,6 @@ namespace Player
             PlayerCore();
             Jump();
             Attack();
-           
         }
 
         private void FixedUpdate()
@@ -148,8 +153,8 @@ namespace Player
 
 
                 mainCam.Priority = 0;
-                firstJumpCam.Priority = 19;
-                Debug.Log($"firstJumpCam.Priority = { firstJumpCam.Priority}");
+                secondJumpCam.Priority = 19;
+                Debug.Log($"firstJumpCam.Priority = { secondJumpCam.Priority}");
 
                 if (_jumpCount == MAXJUMPCOUNT && isJump_Frag == true)
                 {
@@ -167,6 +172,12 @@ namespace Player
                 _anim.SetBool("SecondJump" , false);
             }
         }
+
+        private void Angle()
+        {
+            var cam = secondJumpCam.GetCinemachineComponent(CinemachineCore.Stage.Aim).GetComponent<CinemachinePOV>().m_VerticalAxis.Value;
+        }
+
 
         void Attack()
         {
@@ -196,6 +207,7 @@ namespace Player
         {
             if (other.gameObject.CompareTag("Enemy") || other.gameObject.CompareTag("Enemy2") && isHit == false)
             {
+                //ここにダメージ処理
                 Debug.Log("当たってるよ～ん");
             }
         }
@@ -210,7 +222,5 @@ namespace Player
                 _jumpCount = 0;
             }
         }
-
-
     }
 }
