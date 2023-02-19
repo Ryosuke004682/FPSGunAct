@@ -10,48 +10,36 @@ namespace Player
     public class PlayerControl : MonoBehaviour
     {
         [Header("Playerの設定")]
-        [SerializeField, Header("Playerの通常の速度")]
-        private float _speed = 2.0f;
-
-        [SerializeField, Header("Playerの走るスピード")]
-        private float _runSpeed = 5.0f;
-
-        [SerializeField, Header("重力")]
-        private float fallSpeed = 5.0f;
+        [Space]
+        [SerializeField, Header("Playerの通常の速度")]   private float _speed = 2.0f;
+        [SerializeField, Header("Playerの走るスピード")] private float _runSpeed = 5.0f;
+        [SerializeField, Header("重力")] private float fallSpeed = 5.0f;
 
 
         //**攻撃、防御のパラメーター設定**
         [Header("攻撃の事、防御力の事")]
-        [SerializeField, Tooltip("攻撃力")]
-        private int _attackPower = 50;
-
-        [SerializeField, Tooltip("防御力")]
-        private int _defence = 20;
+        [Space]
+        [SerializeField, Tooltip("攻撃力")] private int _attackPower = 50;
+        [SerializeField, Tooltip("防御力")] private int _defence = 20;
 
         bool isAttack;
         bool isHit;
 
         public Collider attackCollider;
 
-        //カメラ設定
+        //**カメラ設定**
         [Header("カメラの設定")]
-        [SerializeField, Header("カメラの回転量")]
-        public float rotationSpeed = 500;
-
-        [SerializeField, Header("メインカメラ")]
-        public CinemachineVirtualCamera mainCam;
-
-        [SerializeField, Header("最初のジャンプのカメラワーク")]
-        public CinemachineVirtualCamera secondJumpCam;
+        [Space]
+        [SerializeField, Header("カメラの回転量")] public float rotationSpeed = 500;
+        [SerializeField, Header("メインカメラ")]   public CinemachineVirtualCamera mainCam;
+        [SerializeField, Header("最初のジャンプのカメラワーク")] public CinemachineVirtualCamera secondJumpCam;
 
 
         //**ジャンプ判定**
         [Header("ジャンプの設定")]
-        [SerializeField, Header("ジャンプ力")]
-        private float _jumpPower = 5.0f;
-
-        [SerializeField, Header("二段ジャンプ目の力")]
-        private float _secondJumpPower = 5.0f;
+        [Space]
+        [SerializeField, Header("ジャンプ力")] private float _jumpPower = 5.0f;
+        [SerializeField, Header("二段ジャンプ目の力")] private float _secondJumpPower = 5.0f;
 
         public int _jumpCount = 0;
         const int MAXJUMPCOUNT = 2;
@@ -59,15 +47,24 @@ namespace Player
         bool isSecondJump_Flag;
         bool isGround;
 
+
         //**接地判定**
         LayerMask groundLayer = 0;
         private float groundDistance = 0.1f;
 
-        
+
+        //**コンポーネント**
         AudioSource _source;
         Rigidbody rb;
         Animator _anim;
         Quaternion rotate;
+
+
+        //**ロックオンの事**
+        public EnemyListManager enemyListManager;
+        public Transform target;
+        public int targetCount;
+
 
         private void Start()
         {
@@ -86,15 +83,14 @@ namespace Player
 
         private void Update()
         {
-            PlayerCore();
             Jump();
             Attack();
-            
+            TargetLockOn();
         }
 
         private void FixedUpdate()
         {
-           
+            PlayerCore();
         }
 
         void PlayerCore()
@@ -135,36 +131,11 @@ namespace Player
             transform.rotation = Quaternion.RotateTowards(transform.rotation, rotate, newRotationSpeed);
         }
 
-        //public void Angle()
-        //{
-        //    /// <summary>
-        //    /// ジャンプしたときにカメラの動機に問題が出たため、
-        //    /// MainのPOVの値をsecondの方に同期させる。
-        //    /// </summary>
-        //        var newMainX = mainCam.GetCinemachineComponent<CinemachinePOV>().m_VerticalAxis.Value;
-        //        var newMainY = mainCam.GetCinemachineComponent<CinemachinePOV>().m_HorizontalAxis.Value;
-
-        //        var newSecondX = secondJumpCam.GetCinemachineComponent<CinemachinePOV>().m_VerticalAxis.Value;
-        //        var newSecondY = secondJumpCam.GetCinemachineComponent<CinemachinePOV>().m_HorizontalAxis.Value;
-
-        //        newSecondX = newMainX;
-        //        newSecondY = newMainY;
-        //}
-
         //重力
         //ジャンプ
         private void Jump()
         {
             Vector3 velocity = Vector3.up;
-
-            var newMainX = mainCam.GetCinemachineComponent<CinemachinePOV>().m_VerticalAxis.Value;
-            var newMainY = mainCam.GetCinemachineComponent<CinemachinePOV>().m_HorizontalAxis.Value;
-
-            var newSecondX = secondJumpCam.GetCinemachineComponent<CinemachinePOV>().m_VerticalAxis.Value * newMainX;
-            var newSecondY = secondJumpCam.GetCinemachineComponent<CinemachinePOV>().m_HorizontalAxis.Value * newMainY;
-
-                
-
 
             if (Input.GetKeyDown(KeyCode.Space) &&  _jumpCount < MAXJUMPCOUNT )
             {
@@ -176,11 +147,8 @@ namespace Player
                 _anim.SetBool("Jump" , true);
                 _jumpCount++;
 
-
                 mainCam.Priority = 0;
-                secondJumpCam.Priority = 19;
-
-               
+                secondJumpCam.m_Priority = 20;
                 
                 Debug.Log($"firstJumpCam.Priority = { secondJumpCam.Priority}");
                 
@@ -201,7 +169,44 @@ namespace Player
             }
         }
 
-      
+
+        void TargetLockOn()
+        {
+            if(Input.GetKeyDown(KeyCode.R))
+            {
+                //リストが空だったら止める。
+                if(enemyListManager.enemyList.Count == 0)
+                {
+                    return;
+                }
+
+                if (enemyListManager.enemyList.Count <= targetCount)
+                {
+                    targetCount = 0;
+                }
+
+                //ターゲットをリストからセットする。
+                target = enemyListManager.enemyList[targetCount];
+
+                targetCount++;
+            }
+          　if(Input.GetKeyDown(KeyCode.LeftControl))
+            {
+                target = null;
+            }
+
+            if(target)
+            {
+                //ターゲットの座標を補完
+                var position = Vector3.zero;
+                position = target.position;
+                //高さはカメラ基準にする。
+                position.y = Camera.main.transform.position.y;
+
+                Camera.main.transform.LookAt(position);
+            }
+
+        }
 
 
         void Attack()
@@ -236,7 +241,6 @@ namespace Player
                 Debug.Log("OK");
             }
         }
-
 
         private void OnCollisionEnter(Collision other)
         {
