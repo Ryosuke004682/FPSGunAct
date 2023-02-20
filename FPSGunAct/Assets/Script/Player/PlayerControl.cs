@@ -147,20 +147,33 @@ namespace Player
 
                 _anim.SetBool("Jump" , true);
                 _jumpCount++;
-
-                mainCam.Priority = 0;
-                secondJumpCam.m_Priority = 20;
                 
                 Debug.Log($"firstJumpCam.Priority = { secondJumpCam.Priority}");
                 
                 if (_jumpCount == MAXJUMPCOUNT && isJump_Frag == true)
                 {
 
+                    mainCam.Priority = 0;
+                    secondJumpCam.m_Priority = 20;
+
+
+                    var newValue_Vertical = mainCam.GetCinemachineComponent<CinemachinePOV>().m_VerticalAxis.Value;
+
+                    secondJumpCam.GetCinemachineComponent<CinemachinePOV>().m_VerticalAxis.Value = newValue_Vertical;
+
+                    var newValue_Horizontal = mainCam.GetCinemachineComponent<CinemachinePOV>().m_HorizontalAxis.Value;
+
+                    secondJumpCam.GetCinemachineComponent<CinemachinePOV>().m_HorizontalAxis.Value = newValue_Horizontal;
+
+
                     isSecondJump_Flag = true;
 
                     rb.AddForce(velocity * _secondJumpPower , ForceMode.Impulse);
 
                     _anim.SetBool("SecondJump" , true);
+
+
+
                 }
             }
             else
@@ -179,6 +192,9 @@ namespace Player
                 if(enemyListManager.enemyList.Count == 0)
                 {
                     mainCam.LookAt = this.transform;
+                    mainCam.GetCinemachineComponent<CinemachineFramingTransposer>().m_CameraDistance = 3;
+                    secondJumpCam.GetCinemachineComponent<CinemachineFramingTransposer>().m_CameraDistance = 3;
+
                     return;
                 }
 
@@ -189,11 +205,15 @@ namespace Player
 
                 //ターゲットをリストからセットする。
                 mainCam.LookAt = enemyListManager.enemyList[targetCount];
+                mainCam.GetCinemachineComponent<CinemachineFramingTransposer>().m_CameraDistance = 5;
+                secondJumpCam.GetCinemachineComponent<CinemachineFramingTransposer>().m_CameraDistance = 5;
+               
                 targetCount++;
             }
           　if(Input.GetKeyDown(KeyCode.LeftControl))
             {
                 mainCam.LookAt = this.transform;
+                mainCam.GetCinemachineComponent<CinemachineFramingTransposer>().m_CameraDistance = 3;
             }
 
             if(target)
@@ -201,10 +221,10 @@ namespace Player
                 //ターゲットの座標を補完
                 var position = Vector3.zero;
                 position = target.position;
-                //高さはカメラ基準にする。
-                position.y = Camera.main.transform.position.y;
 
-                Camera.main.transform.LookAt(position);
+                //高さはカメラ基準にする。
+                position.y = mainCam.LookAt.transform.position.y;
+                mainCam.LookAt.transform.LookAt(position);
             }
         }
 

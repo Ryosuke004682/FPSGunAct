@@ -23,7 +23,6 @@ public class EnemyListManager : MonoBehaviour
             {
                 enemyList.RemoveAt(i);
             }
-
         }
     }
 
