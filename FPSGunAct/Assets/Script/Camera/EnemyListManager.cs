@@ -8,6 +8,7 @@ public class EnemyListManager : MonoBehaviour
 
     private void Update()
     {
+        //”ÍˆÍ“à‚Éd•¡‚µ‚Ä‚¢‚éGameObject‚ğÁ‚·B
         for(var i = 0; i < enemyList.Count; i++)
         {
             for(var j = i + 1; j < enemyList.Count; j++)

@@ -79,6 +79,7 @@ namespace Player
             rb.freezeRotation = true;
 
             rotate = transform.rotation;
+            
         }
 
         private void Update()
@@ -177,6 +178,7 @@ namespace Player
                 //リストが空だったら止める。
                 if(enemyListManager.enemyList.Count == 0)
                 {
+                    mainCam.LookAt = this.transform;
                     return;
                 }
 
@@ -186,13 +188,12 @@ namespace Player
                 }
 
                 //ターゲットをリストからセットする。
-                target = enemyListManager.enemyList[targetCount];
-
+                mainCam.LookAt = enemyListManager.enemyList[targetCount];
                 targetCount++;
             }
           　if(Input.GetKeyDown(KeyCode.LeftControl))
             {
-                target = null;
+                mainCam.LookAt = this.transform;
             }
 
             if(target)
@@ -205,7 +206,6 @@ namespace Player
 
                 Camera.main.transform.LookAt(position);
             }
-
         }
 
 
