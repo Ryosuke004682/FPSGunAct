@@ -14,14 +14,14 @@ public class Game_Event2 : MonoBehaviour
 
     private Animator anim;
     private AudioSource source;
-    public  AudioClip clip;
+    public AudioClip clip;
 
     private void Start()
     {
         anim = GetComponent<Animator>();
         anim.SetBool(stateParameterName, false);
         source = GetComponent<AudioSource>();
-        source.playOnAwake = false;
+        source.playOnAwake = true;
     }
 
     private void Update()
@@ -33,9 +33,6 @@ public class Game_Event2 : MonoBehaviour
     {
         StartCoroutine(Event());
     }
-
-    //処理が終わるまでの時間を計測して、
-    //計測した時間をEventEndに保持させたい。
 
     public IEnumerator Event()
     {
@@ -49,6 +46,8 @@ public class Game_Event2 : MonoBehaviour
             yield return new WaitForSeconds(2);
             anim.SetBool(stateParameterName, true);
             source.playOnAwake = true;
+            
+            Debug.Log(source.playOnAwake);
             source.PlayOneShot(clip);
         }
 
