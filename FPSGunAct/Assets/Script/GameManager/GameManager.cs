@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     Text[] text;
 
-    bool flag = false;
+    //bool flag = false;
 
     private void Start()
     {

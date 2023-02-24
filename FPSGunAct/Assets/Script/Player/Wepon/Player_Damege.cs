@@ -1,11 +1,11 @@
+using DG.Tweening;
+using Player;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Player_Damege : Damage_Master
 {
-    bool hit = false;
-
     private void Start()
     {
         
@@ -24,11 +24,8 @@ public class Player_Damege : Damage_Master
 
     private void OnCollisionEnter(Collision other)
     {
-        if(other.gameObject.CompareTag("Enemy") || other.gameObject.CompareTag("Enemy2"))
-        {
-            hit = true;
-            Debug.Log("ìñÇΩÇ¡ÇƒÇÈÇÊÅ`ÇÒ");
-        }
+        
     }
+    
 
 }

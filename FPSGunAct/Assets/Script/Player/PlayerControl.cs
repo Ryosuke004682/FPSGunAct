@@ -1,6 +1,8 @@
 using Cinemachine;
+using DG.Tweening;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem.HID;
 using UnityEngine.UIElements;
 
 namespace Player
@@ -21,6 +23,8 @@ namespace Player
         [Space]
         [SerializeField, Tooltip("攻撃力")] private int _attackPower = 50;
         [SerializeField, Tooltip("防御力")] private int _defence = 20;
+
+        [SerializeField, Tooltip("プレイヤーのヒットストップの時間")] private float _hitStopTime = 0.5f;
 
         bool isAttack;
         bool isHit;
@@ -44,17 +48,23 @@ namespace Player
         public int _jumpCount = 0;
         const int MAXJUMPCOUNT = 2;
         bool isJump_Frag;
-        bool isSecondJump_Flag;
-        bool isGround;
+        bool isSecondJump_Flag = false;
+
+
+        //**エフェクト周り**
+        [Header("エフェクト")]
+        [Space]
+        [SerializeField, Header("攻撃用エフェクト")] private ParticleSystem attackPTL; //PTL = particle
 
 
         //**接地判定**
-        LayerMask groundLayer = 0;
-        private float groundDistance = 0.1f;
+        //LayerMask groundLayer = 0;
+        //private float groundDistance = 0.1f;
 
 
         //**コンポーネント**
         AudioSource _source;
+        AudioClip[] clips;
         Rigidbody rb;
         Animator _anim;
         Quaternion rotate;
@@ -171,9 +181,6 @@ namespace Player
                     rb.AddForce(velocity * _secondJumpPower , ForceMode.Impulse);
 
                     _anim.SetBool("SecondJump" , true);
-
-
-
                 }
             }
             else
@@ -186,7 +193,7 @@ namespace Player
 
         void TargetLockOn()
         {
-            if(Input.GetKeyDown(KeyCode.R))
+            if (Input.GetKeyDown(KeyCode.R))
             {
                 //リストが空だったら止める。
                 if(enemyListManager.enemyList.Count == 0)
@@ -207,13 +214,14 @@ namespace Player
                 mainCam.LookAt = enemyListManager.enemyList[targetCount];
                 mainCam.GetCinemachineComponent<CinemachineFramingTransposer>().m_CameraDistance = 5;
                 secondJumpCam.GetCinemachineComponent<CinemachineFramingTransposer>().m_CameraDistance = 5;
-               
+
                 targetCount++;
             }
           　if(Input.GetKeyDown(KeyCode.LeftControl))
             {
                 mainCam.LookAt = this.transform;
                 mainCam.GetCinemachineComponent<CinemachineFramingTransposer>().m_CameraDistance = 3;
+                
             }
 
             if(target)
@@ -228,7 +236,7 @@ namespace Player
             }
         }
 
-
+        //**攻撃しているかどうかの判定**
         void Attack()
         {
             if (Input.GetMouseButtonDown(0) && isAttack == false)
@@ -243,27 +251,51 @@ namespace Player
             }
         }
 
+        //**ヒットストップ**
+        public void OnHitAttack()
+        {
+            _anim.speed = 0;
+
+            var sequenceTime = DOTween.Sequence(_hitStopTime);
+            sequenceTime.AppendCallback(() => _anim.speed = 1.0f);
+
+        }
+
+        //**animationのコライダーのON,OFF**
+        public void OnCollider()
+        {
+            attackCollider.enabled = true;
+        　　
+            if(attackCollider.enabled == true)
+            {
+                OnHitAttack();
+                _source.PlayOneShot(clips[0]);
+            }
+            else
+            {
+                attackPTL.Stop();
+            }
+
+        }
+
         public void OffCollider()
         {
             attackCollider.enabled = false;
         }
+ 
 
-        public void OnCollider()
-        {
-            attackCollider.enabled = true;
-
-        }
-        private void OnTriggerEnter(Collider other)
-        {
-            if (other.gameObject.CompareTag("Enemy") || other.gameObject.CompareTag("Enemy2") && isHit == false)
-            {
-                //ここにダメージ処理
-                Debug.Log("OK");
-            }
-        }
-
+        //**当たり判定全般**
         private void OnCollisionEnter(Collision other)
         {
+            //攻撃が当たってるかどうか
+            if (other.gameObject.CompareTag("Enemy1") || other.gameObject.CompareTag("Enemy2"))
+            {
+                isHit = true;
+                Debug.Log("当たってるよ～ん");
+            }
+
+
+            //地面か判定する
             if (other.gameObject.CompareTag("Ground"))
             {
                 Debug.Log("True");
