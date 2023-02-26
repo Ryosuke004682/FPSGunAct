@@ -10,7 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4130311200430063758}
   - component: {fileID: 50461406224917967}
-  - component: {fileID: 8924212043979678637}
+  - component: {fileID: -7698292011139050125}
+  - component: {fileID: -3095106114458987834}
   m_Layer: 0
   m_Name: EnemyDoll2
   m_TagString: Enemy1
@@ -47,8 +48,28 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1.5, y: 3, z: 1.5}
-  m_Center: {x: -6.38, y: 1.63, z: 0}
---- !u!114 &8924212043979678637
+  m_Center: {x: 0, y: 0.5, z: 0}
+--- !u!95 &-7698292011139050125
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1320664512862804307}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &-3095106114458987834
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -57,9 +78,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 1320664512862804307}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7421f51da5733554384eb50c01020f88, type: 3}
+  m_Script: {fileID: 11500000, guid: 0845096003c531349b5e0a6cb2c3babb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _maxHp: 0
+  _nowHP: 0
+  hpSlider: {fileID: 0}
+  _anim: {fileID: 0}
 --- !u!1 &4910788577734464935
 GameObject:
   m_ObjectHideFlags: 0
@@ -87,7 +112,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4910788577734464935}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.335, y: 2.76, z: 0.004}
+  m_LocalPosition: {x: 0, y: 1.5, z: 0}
   m_LocalScale: {x: 0.6494972, y: 0.6494972, z: 0.6494972}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -184,7 +209,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7072155329435413736}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.35, y: 1.21, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.88693, y: 2.428459, z: 0.82923}
   m_ConstrainProportionsScale: 0
   m_Children: []
