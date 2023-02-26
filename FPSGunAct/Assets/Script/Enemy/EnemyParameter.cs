@@ -12,6 +12,7 @@ public class EnemyParameter : Damage_Master
     [SerializeField] private int _nowHP;
 
     [SerializeField] Slider hpSlider;
+    [SerializeField] TMPro.TextMeshPro damageText;
 
 
     [SerializeField] private Animator _anim;
@@ -30,7 +31,7 @@ public class EnemyParameter : Damage_Master
     private void Update()
     {
         hpSlider.transform.rotation = Camera.main.transform.rotation;
-
+        damageText.transform.rotation = Camera.main.transform.rotation;
     }
 
     private void FixedUpdate()
@@ -45,13 +46,20 @@ public class EnemyParameter : Damage_Master
         {
             _anim.SetInteger("GiveDamage", UnityEngine.Random.Range(1, 5));
 
-            _nowHP -= UnityEngine.Random.Range(1, 2);
+            var damage = UnityEngine.Random.Range(1,3);
+            damageText.text = damage.ToString();
+            
+            _nowHP -= damage;
             hpSlider.value = _nowHP;
-
+            
 
             Debug.Log("HP" + hpSlider.value + "--" + _nowHP);
 
             if (_nowHP == 0)
+            {
+                Destroy(this.gameObject , 0f);
+            }
+            else if(_nowHP <= 0)
             {
                 Destroy(this.gameObject , 0f);
             }
