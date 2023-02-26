@@ -22,12 +22,15 @@ public class EnemyParameter : Damage_Master
 
         hpSlider.value = _maxHp;
         _nowHP = _maxHp;
+        hpSlider.maxValue = _maxHp;
+        hpSlider.value = _maxHp;
 
     }
 
     private void Update()
     {
         hpSlider.transform.rotation = Camera.main.transform.rotation;
+
     }
 
     private void FixedUpdate()
@@ -43,7 +46,8 @@ public class EnemyParameter : Damage_Master
             _anim.SetInteger("GiveDamage", UnityEngine.Random.Range(1, 5));
 
             _nowHP -= UnityEngine.Random.Range(1, 2);
-            hpSlider.value = _nowHP / _maxHp;
+            hpSlider.value = _nowHP;
+
 
             Debug.Log("HP" + hpSlider.value + "--" + _nowHP);
 
