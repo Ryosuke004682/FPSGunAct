@@ -76,18 +76,19 @@ namespace BehaviorTree
             return null;
         }
 
-        public bool ClearData(string key)
+        public bool ClearData(string tagName)
         {
-            if(_dataContext.ContainsKey(key))
+            if(_dataContext.ContainsKey(tagName))
             {
-                _dataContext.Remove(key);
+                _dataContext.Remove(tagName);
                 return true;
+
             }
 
             Node node = entry_parent;
             while(node != null)
             {
-                bool cleared = node.ClearData(key);
+                bool cleared = node.ClearData(tagName);
 
                 if(cleared)
                 {

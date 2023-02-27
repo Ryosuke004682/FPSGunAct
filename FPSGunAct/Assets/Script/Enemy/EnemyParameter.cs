@@ -21,7 +21,6 @@ public class EnemyParameter : Damage_Master
     {
         _anim = GetComponent<Animator>();
 
-        hpSlider.value = _maxHp;
         _nowHP = _maxHp;
         hpSlider.maxValue = _maxHp;
         hpSlider.value = _maxHp;
@@ -55,11 +54,7 @@ public class EnemyParameter : Damage_Master
 
             Debug.Log("HP" + hpSlider.value + "--" + _nowHP);
 
-            if (_nowHP == 0)
-            {
-                Destroy(this.gameObject , 0f);
-            }
-            else if(_nowHP <= 0)
+            if(_nowHP <= 0)
             {
                 Destroy(this.gameObject , 0f);
             }

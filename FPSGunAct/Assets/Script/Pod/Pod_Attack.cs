@@ -17,6 +17,8 @@ public class Pod_Attack : MonoBehaviour
     [SerializeField ,Header("射撃スピード")]
     private float reLoadTime = 0.08f;
 
+    Quaternion rotation;
+
 
     private void Start()
     {
@@ -26,6 +28,9 @@ public class Pod_Attack : MonoBehaviour
     private void Update()
     {
         PodAttack();
+
+        Camera.main.transform.rotation = Quaternion.Lerp(this.transform.rotation , rotation , Time.deltaTime * 0.1f);
+
     }
 
     private void PodAttack()
