@@ -34,9 +34,10 @@ namespace Player
         //**カメラ設定**
         [Header("カメラの設定")]
         [Space]
-        [SerializeField, Header("カメラの回転量")] public float rotationSpeed = 500;
+        [SerializeField, Header("カメラの回転量")] public float _rotationSpeed = 500;
         [SerializeField, Header("メインカメラ")]   public CinemachineVirtualCamera mainCam;
-        [SerializeField, Header("最初のジャンプのカメラワーク")] public CinemachineVirtualCamera secondJumpCam;
+        [SerializeField, Header("最初のジャンプのカメラ")] public CinemachineVirtualCamera secondJumpCam;
+        [SerializeField, Header("攻撃用のカメラ")] private CinemachineVirtualCamera attckCam;
 
 
         //**ジャンプ判定**
@@ -113,14 +114,17 @@ namespace Player
             
             var velocity = horizontalRotate * new Vector3(horizontal, 0, vertical).normalized;
 
-            var newRotationSpeed = rotationSpeed * Time.deltaTime;
+            var newRotationSpeed = _rotationSpeed * Time.deltaTime;
 
             if (velocity.sqrMagnitude > 1.0f)
             {
                 rotate = Quaternion.LookRotation(velocity);
 
-                transform.rotation = Quaternion.Lerp(transform.rotation , rotate , Time.deltaTime);
+                transform.rotation = Quaternion.Lerp(transform.rotation , rotate , Time.time);
+                
             }
+
+            transform.rotation = Quaternion.RotateTowards(transform.rotation , rotate, _rotationSpeed);
 
             _anim.SetFloat("Speed", velocity.sqrMagnitude);
 
@@ -165,7 +169,7 @@ namespace Player
                 {
 
                     mainCam.Priority = 0;
-                    secondJumpCam.m_Priority = 20;
+                    secondJumpCam.Priority = 18;
 
 
                     var newValue_Vertical = mainCam.GetCinemachineComponent<CinemachinePOV>().m_VerticalAxis.Value;
@@ -186,6 +190,8 @@ namespace Player
             }
             else
             {
+                mainCam.Priority = 19;
+                secondJumpCam.Priority = 18;
                 _anim.SetBool("Jump" , false);
                 _anim.SetBool("SecondJump" , false);
             }
@@ -243,12 +249,18 @@ namespace Player
             if (Input.GetMouseButtonDown(0) && isAttack == false)
             {
                 isAttack = true;
+                mainCam.Priority = 0;
+                attckCam.Priority = 17;
+                
                 _anim.SetBool("Attack", true);
             }
             else if(Input.GetMouseButtonUp(0))
             {
                 isAttack = false;
                 _anim.SetBool("Attack" , false);
+
+                attckCam.Priority = 17;
+                mainCam.Priority = 19;
             }
         }
 
@@ -300,7 +312,7 @@ namespace Player
             if (other.gameObject.CompareTag("Ground"))
             {
                 Debug.Log("True");
-                mainCam.Priority = 20;
+                mainCam.Priority = 19;
                 _jumpCount = 0;
             }
         }
