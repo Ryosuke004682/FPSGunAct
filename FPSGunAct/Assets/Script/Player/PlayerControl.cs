@@ -118,7 +118,8 @@ namespace Player
             if (velocity.sqrMagnitude > 1.0f)
             {
                 rotate = Quaternion.LookRotation(velocity);
-                transform.rotation = Quaternion.Lerp(transform.rotation , rotate , Time.deltaTime * 20);
+
+                transform.rotation = Quaternion.Lerp(transform.rotation , rotate , Time.deltaTime);
             }
 
             _anim.SetFloat("Speed", velocity.sqrMagnitude);
