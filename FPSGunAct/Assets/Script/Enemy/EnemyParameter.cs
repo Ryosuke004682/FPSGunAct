@@ -63,10 +63,6 @@ public class EnemyParameter : Damage_Master
             {
                 Destroy(this.gameObject , 0f);
             }
-
-
         }
     }
-
-   
 }
