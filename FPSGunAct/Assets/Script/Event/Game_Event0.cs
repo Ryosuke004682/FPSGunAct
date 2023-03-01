@@ -38,8 +38,6 @@ namespace Event
             yield return null;
 
             enemyObject = GameObject.FindGameObjectsWithTag("Enemy1");
-            Debug.Log(enemyObject.Length);
-
 
             if (enemyObject.Length == 0)
             {
