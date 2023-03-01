@@ -6,7 +6,6 @@ using UnityEngine.UIElements;
 
 namespace Player
 {
-
     [RequireComponent(typeof(Rigidbody))]
     public class PlayerControl : MonoBehaviour
     {
@@ -22,8 +21,6 @@ namespace Player
         [Space]
         [SerializeField, Tooltip("攻撃力")] private int _attackPower = 50;
         [SerializeField, Tooltip("防御力")] private int _defence = 20;
-
-        [SerializeField, Tooltip("プレイヤーのヒットストップの時間")] private float _hitStopTime = 0.5f;
 
         bool isAttack;
         bool isHit;
@@ -268,10 +265,7 @@ namespace Player
         //**ヒットストップ**
         public void OnHitAttack()
         {
-            _anim.speed = 0;
-
-            var sequenceTime = DOTween.Sequence(_hitStopTime);
-            sequenceTime.AppendCallback(() => _anim.speed = 1.0f);
+           
 
         }
 
@@ -279,16 +273,12 @@ namespace Player
         public void OnCollider()
         {
             attackCollider.enabled = true;
-        　　
-            if(attackCollider.enabled == true)
-            {
-                OnHitAttack();
-                _source.PlayOneShot(clips[0]);
+
+            if (attackCollider.enabled == true)
+            {//パーティクル系を入れるとこ
             }
             else
-            {
-                attackPTL.Stop();
-            }
+            { }
 
         }
 

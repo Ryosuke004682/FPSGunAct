@@ -22,7 +22,7 @@ public class EnemyChecker : Node
 
             if(collider.Length > 0)
             {
-                entry_parent.entry_parent.SetDate("Enemy" , collider[0].transform);
+                parent.parent.SetDate("Enemy" , collider[0].transform);
                 state = NodeState.SUCSESS;
                 return state;
             }
