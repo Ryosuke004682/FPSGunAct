@@ -1,6 +1,5 @@
 using Cinemachine;
 using DG.Tweening;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem.HID;
 using UnityEngine.UIElements;
@@ -38,6 +37,10 @@ namespace Player
         [SerializeField, Header("メインカメラ")]   public CinemachineVirtualCamera mainCam;
         [SerializeField, Header("最初のジャンプのカメラ")] public CinemachineVirtualCamera secondJumpCam;
         [SerializeField, Header("攻撃用のカメラ")] private CinemachineVirtualCamera attckCam;
+        [SerializeField, Header("ロックオンするときのキー")] private KeyCode lockOnKey = KeyCode.R;
+        [SerializeField, Header("ロックオン解除するときのキー")] private KeyCode lockOnRelese = KeyCode.LeftControl;
+
+
 
 
         //**ジャンプ判定**
@@ -114,17 +117,16 @@ namespace Player
             
             var velocity = horizontalRotate * new Vector3(horizontal, 0, vertical).normalized;
 
-            var newRotationSpeed = _rotationSpeed * Time.deltaTime;
+            //var newRotationSpeed = _rotationSpeed * Time.deltaTime;
 
             if (velocity.sqrMagnitude > 1.0f)
             {
-                rotate = Quaternion.LookRotation(velocity);
+                transform.rotation = Quaternion.Lerp(transform.rotation, rotate, Time.deltaTime);
 
-                transform.rotation = Quaternion.Lerp(transform.rotation , rotate , Time.time);
-                
+                rotate = Quaternion.LookRotation(velocity);
             }
 
-            transform.rotation = Quaternion.RotateTowards(transform.rotation , rotate, _rotationSpeed);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, rotate, 500.0f);
 
             _anim.SetFloat("Speed", velocity.sqrMagnitude);
 
@@ -144,7 +146,6 @@ namespace Player
                 _anim.SetBool("SprintSpeed" , false);
             }
 
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, rotate, newRotationSpeed);
         }
 
         //重力
@@ -162,8 +163,10 @@ namespace Player
 
                 _anim.SetBool("Jump" , true);
                 _jumpCount++;
-                
-                Debug.Log($"firstJumpCam.Priority = { secondJumpCam.Priority}");
+
+                Debug.Log($"ジャンプ前のMainCam : mainCam.Priority = {mainCam.Priority}");
+                Debug.Log($"ジャンプ前のSecondCam : secondJumpCam.Priority = { secondJumpCam.Priority}");
+
                 
                 if (_jumpCount == MAXJUMPCOUNT && isJump_Frag == true)
                 {
@@ -171,6 +174,8 @@ namespace Player
                     mainCam.Priority = 0;
                     secondJumpCam.Priority = 18;
 
+                    Debug.Log($"ジャンプ後のmainCam :mainCam.Priority = {mainCam.Priority}");
+                    Debug.Log($"ジャンプ後のSecondCam : secondJumpCam.Priority = {secondJumpCam.Priority}");
 
                     var newValue_Vertical = mainCam.GetCinemachineComponent<CinemachinePOV>().m_VerticalAxis.Value;
 
@@ -190,8 +195,6 @@ namespace Player
             }
             else
             {
-                mainCam.Priority = 19;
-                secondJumpCam.Priority = 18;
                 _anim.SetBool("Jump" , false);
                 _anim.SetBool("SecondJump" , false);
             }
@@ -200,7 +203,7 @@ namespace Player
 
         void TargetLockOn()
         {
-            if (Input.GetKeyDown(KeyCode.R))
+            if (Input.GetKeyDown(lockOnKey))//規定値は「Rキー」
             {
                 //リストが空だったら止める。
                 if(enemyListManager.enemyList.Count == 0)
@@ -217,6 +220,7 @@ namespace Player
                     targetCount = 0;
                 }
 
+                //**ロックオンシステム**
                 //ターゲットをリストからセットする。
                 mainCam.LookAt = enemyListManager.enemyList[targetCount];
                 mainCam.GetCinemachineComponent<CinemachineFramingTransposer>().m_CameraDistance = 5;
@@ -224,7 +228,8 @@ namespace Player
 
                 targetCount++;
             }
-          　if(Input.GetKeyDown(KeyCode.LeftControl))
+            //**ロックオン解除
+          　if(Input.GetKeyDown(lockOnRelese))
             {
                 mainCam.LookAt = this.transform;
                 mainCam.GetCinemachineComponent<CinemachineFramingTransposer>().m_CameraDistance = 3;
@@ -249,8 +254,7 @@ namespace Player
             if (Input.GetMouseButtonDown(0) && isAttack == false)
             {
                 isAttack = true;
-                mainCam.Priority = 0;
-                attckCam.Priority = 17;
+               
                 
                 _anim.SetBool("Attack", true);
             }
@@ -258,9 +262,6 @@ namespace Player
             {
                 isAttack = false;
                 _anim.SetBool("Attack" , false);
-
-                attckCam.Priority = 17;
-                mainCam.Priority = 19;
             }
         }
 
@@ -304,9 +305,8 @@ namespace Player
             if (other.gameObject.CompareTag("Enemy1") || other.gameObject.CompareTag("Enemy2"))
             {
                 isHit = true;
-                Debug.Log("当たってるよ～ん");
+                Debug.Log("Attack＿HIT＿OK");
             }
-
 
             //地面か判定する
             if (other.gameObject.CompareTag("Ground"))
