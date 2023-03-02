@@ -31,9 +31,9 @@ namespace Player
         [Header("カメラの設定")]
         [Space]
         [SerializeField, Header("カメラの回転量")] public float _rotationSpeed = 500;
-        [SerializeField, Header("メインカメラ")]   public CinemachineVirtualCamera mainCam;
-        [SerializeField, Header("最初のジャンプのカメラ")] public CinemachineVirtualCamera secondJumpCam;
-        [SerializeField, Header("攻撃用のカメラ")] private CinemachineVirtualCamera attckCam;
+        [SerializeField, Header("メインカメラ")]   public  CinemachineVirtualCamera mainCam;
+        [SerializeField, Header("最初のジャンプのカメラ")] public  CinemachineVirtualCamera secondJumpCam;
+        [SerializeField, Header("攻撃用のカメラ")] public  CinemachineVirtualCamera attackCam;
         [SerializeField, Header("ロックオンするときのキー")] private KeyCode lockOnKey = KeyCode.R;
         [SerializeField, Header("ロックオン解除するときのキー")] private KeyCode lockOnRelese = KeyCode.LeftControl;
 
@@ -76,6 +76,7 @@ namespace Player
         public Transform target;
         public int targetCount;
 
+        Pod_Attack podAttack;
 
         private void Start()
         {
@@ -90,6 +91,8 @@ namespace Player
             rb.freezeRotation = true;
 
             rotate = transform.rotation;
+
+            mainCam.Priority = 19;
             
         }
 
@@ -246,26 +249,34 @@ namespace Player
         }
 
         //**攻撃しているかどうかの判定**
-        void Attack()
+        public void Attack()
         {
-            if (Input.GetMouseButtonDown(0) && isAttack == false)
+            if (Input.GetMouseButtonDown(1))
+            {
+                attackCam.Priority = 17;
+                secondJumpCam.Priority = 0;
+                mainCam.Priority = 0;
+
+            }
+            else if(Input.GetMouseButtonUp(1))
+            {
+                mainCam.Priority = 19;
+                attackCam.Priority = 0;
+                secondJumpCam.Priority = 0;
+            }
+
+            if(Input.GetMouseButtonDown(0) && isAttack == false)
             {
                 isAttack = true;
-               
-                
                 _anim.SetBool("Attack", true);
+                Debug.Log($"attackCam.Priority =" + attackCam.Priority);
+
             }
-            else if(Input.GetMouseButtonUp(0))
+            else if(Input.GetMouseButtonUp(1))
             {
                 isAttack = false;
-                _anim.SetBool("Attack" , false);
+                _anim.SetBool("Attack", false);
             }
-        }
-
-        //**ヒットストップ**
-        public void OnHitAttack()
-        {
-           
 
         }
 

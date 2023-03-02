@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class HitStopContoroller : MonoBehaviour
 {
+    //‚â‚é‚±‚Æ
     //~‚ß‚é
     //~‚ß‚È‚ª‚ç—h‚ç‚·iƒJƒƒ‰‚ğj
     public static HitStopContoroller hitStop;

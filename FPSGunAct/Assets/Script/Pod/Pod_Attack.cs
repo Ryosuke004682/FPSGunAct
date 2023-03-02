@@ -1,3 +1,5 @@
+using Cinemachine;
+using Player;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
@@ -28,29 +30,28 @@ public class Pod_Attack : MonoBehaviour
     private void Update()
     {
         PodAttack();
+
         rotation = Quaternion.Lerp(transform.rotation, rotation , Time.deltaTime );
-
-
     }
-
-    private void PodAttack()
+    public void PodAttack()
     {
-        if(Input.GetMouseButton(1))
+        if (Input.GetMouseButton(1))
         {
             Shot();
+
         }
     }
 
-    private void Shot()
-    {
-        time += Time.deltaTime;
-
-        if (time > reLoadTime)
+        public void Shot()
         {
+            time += Time.deltaTime;
 
-            var bulletPosition = ShotPoint.transform.position;
-            var newBallet = Instantiate(Bullet, bulletPosition, transform.rotation);
-           //var direction = newBallet.transform.forward;
+            if (time > reLoadTime)
+            {
+
+                var bulletPosition = ShotPoint.transform.position;
+                var newBallet = Instantiate(Bullet, bulletPosition, transform.rotation);
+                //var direction = newBallet.transform.forward;
 
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                 Vector3 rayPosition = ray.direction;
@@ -61,18 +62,15 @@ public class Pod_Attack : MonoBehaviour
 
 
 
-            Destroy(newBallet, 1.0f);
+                Destroy(newBallet, 1.0f);
 
-            time = 0;
+                time = 0;
+            }
         }
-    }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        
-        
-    }
+        private void OnTriggerEnter(Collider other)
+        {
 
 
-
+        }
 }
