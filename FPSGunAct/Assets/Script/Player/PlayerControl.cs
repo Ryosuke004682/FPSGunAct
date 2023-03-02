@@ -6,7 +6,6 @@ using UnityEngine.UIElements;
 
 namespace Player
 {
-
     [RequireComponent(typeof(Rigidbody))]
     public class PlayerControl : MonoBehaviour
     {
@@ -23,8 +22,6 @@ namespace Player
         [SerializeField, Tooltip("攻撃力")] private int _attackPower = 50;
         [SerializeField, Tooltip("防御力")] private int _defence = 20;
 
-        [SerializeField, Tooltip("プレイヤーのヒットストップの時間")] private float _hitStopTime = 0.5f;
-
         bool isAttack;
         bool isHit;
 
@@ -34,9 +31,9 @@ namespace Player
         [Header("カメラの設定")]
         [Space]
         [SerializeField, Header("カメラの回転量")] public float _rotationSpeed = 500;
-        [SerializeField, Header("メインカメラ")]   public CinemachineVirtualCamera mainCam;
-        [SerializeField, Header("最初のジャンプのカメラ")] public CinemachineVirtualCamera secondJumpCam;
-        [SerializeField, Header("攻撃用のカメラ")] private CinemachineVirtualCamera attckCam;
+        [SerializeField, Header("メインカメラ")]   public  CinemachineVirtualCamera mainCam;
+        [SerializeField, Header("最初のジャンプのカメラ")] public  CinemachineVirtualCamera secondJumpCam;
+        [SerializeField, Header("攻撃用のカメラ")] public  CinemachineVirtualCamera attackCam;
         [SerializeField, Header("ロックオンするときのキー")] private KeyCode lockOnKey = KeyCode.R;
         [SerializeField, Header("ロックオン解除するときのキー")] private KeyCode lockOnRelese = KeyCode.LeftControl;
 
@@ -79,6 +76,7 @@ namespace Player
         public Transform target;
         public int targetCount;
 
+        Pod_Attack podAttack;
 
         private void Start()
         {
@@ -93,6 +91,8 @@ namespace Player
             rb.freezeRotation = true;
 
             rotate = transform.rotation;
+
+            mainCam.Priority = 19;
             
         }
 
@@ -249,29 +249,34 @@ namespace Player
         }
 
         //**攻撃しているかどうかの判定**
-        void Attack()
+        public void Attack()
         {
-            if (Input.GetMouseButtonDown(0) && isAttack == false)
+            if (Input.GetMouseButtonDown(1))
+            {
+                attackCam.Priority = 17;
+                secondJumpCam.Priority = 0;
+                mainCam.Priority = 0;
+
+            }
+            else if(Input.GetMouseButtonUp(1))
+            {
+                mainCam.Priority = 19;
+                attackCam.Priority = 0;
+                secondJumpCam.Priority = 0;
+            }
+
+            if(Input.GetMouseButtonDown(0) && isAttack == false)
             {
                 isAttack = true;
-               
-                
                 _anim.SetBool("Attack", true);
+                Debug.Log($"attackCam.Priority =" + attackCam.Priority);
+
             }
-            else if(Input.GetMouseButtonUp(0))
+            else if(Input.GetMouseButtonUp(1))
             {
                 isAttack = false;
-                _anim.SetBool("Attack" , false);
+                _anim.SetBool("Attack", false);
             }
-        }
-
-        //**ヒットストップ**
-        public void OnHitAttack()
-        {
-            _anim.speed = 0;
-
-            var sequenceTime = DOTween.Sequence(_hitStopTime);
-            sequenceTime.AppendCallback(() => _anim.speed = 1.0f);
 
         }
 
@@ -279,16 +284,12 @@ namespace Player
         public void OnCollider()
         {
             attackCollider.enabled = true;
-        　　
-            if(attackCollider.enabled == true)
-            {
-                OnHitAttack();
-                _source.PlayOneShot(clips[0]);
+
+            if (attackCollider.enabled == true)
+            {//パーティクル系を入れるとこ
             }
             else
-            {
-                attackPTL.Stop();
-            }
+            { }
 
         }
 

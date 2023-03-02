@@ -1,6 +1,4 @@
 using BehaviorTree;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class TaskAttack : Node
@@ -18,12 +16,14 @@ public class TaskAttack : Node
 
     public override NodeState Request()
     {
-        Transform target = (Transform)GetData("target");
+        Transform target = (Transform)GetData("Player");
 
         if(target != _transform)
         {
+            Debug.Log("あいう");
             _manager = target.GetComponent<EnemyManager>();
             _transform = target;
+            Debug.Log("target" + _transform);
         }
 
         //攻撃後のクールタイム
@@ -31,7 +31,7 @@ public class TaskAttack : Node
         _attackCount += Time.deltaTime;
         if(_attackCount >= _attackTime)
         {
-            var enemyIsDead = _manager.TaskHit();
+            bool enemyIsDead = _manager.TaskHit();
 
             if(enemyIsDead)
             {

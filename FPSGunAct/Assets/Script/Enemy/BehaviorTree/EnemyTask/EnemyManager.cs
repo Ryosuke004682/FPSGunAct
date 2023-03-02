@@ -3,45 +3,29 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-[RequireComponent(typeof(Animator))]
 public class EnemyManager : MonoBehaviour
 {
-    [SerializeField, Header("HP")] protected int _maxHp = 100;
-    protected int _nowHP;
-
-    [Header("ダメージの散布幅")]
-    [Space]
-    [SerializeField, Header("最大ダメージ")] private int _maxDmg = 35;
-    [SerializeField, Header("最小ダメージ")] private int _minDmg = 5;
-
-
-    [SerializeField] Slider hpSlider;
-    [SerializeField] TMPro.TextMeshPro damageText;
-
-    Animator _anim;
+    private int _health;
 
     private void Awake()
     {
-        _anim = GetComponent<Animator>();
-
-        _nowHP = _maxHp;
-        hpSlider.maxValue = _nowHP;
-        hpSlider.value    = _maxHp;
+        _health = 50;
     }
 
     public bool TaskHit()
     {
-        _maxHp -= Random.Range(_minDmg,_maxDmg);
-
-        bool isDeath = _nowHP <= 0;
+        _health -= 10;
+ 
+        bool isDeath = _health <= 0;
 
         Debug.Log("しっかり当たってるよ。");
 
-        if(isDeath)
+        if (isDeath)
         {
             Did();
-            Debug.Log("死亡確認");
         }
+        
+        Debug.Log("死亡確認");
         return isDeath;
     }
 

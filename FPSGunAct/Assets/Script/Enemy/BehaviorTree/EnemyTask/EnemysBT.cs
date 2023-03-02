@@ -5,11 +5,11 @@ using System.Collections.Generic;
 //BT = Behavior Tree
 public class EnemysBT : Entry
 {
-    public Transform[] wanderings; //wanderings = œpœj
+    [SerializeField , Tooltip("œpœjƒ|ƒCƒ“ƒg")] public Transform[] wanderings; //wanderings = œpœj
 
-    public static float _speed    = 5.0f;
-    public static float _forRange = 6.0f;
-    public static float _attackRange = 0.5f;
+    public static float _speed    = 5.0f; //’Ç‚¢‚©‚¯‚éƒXƒs[ƒh
+    public static float _forRange = 6.0f; //ŒŸ’m”ÍˆÍ
+    public static float _attackRange = 0.5f; //UŒ‚”ÍˆÍ
 
     protected override Node SetUpTree()
     {

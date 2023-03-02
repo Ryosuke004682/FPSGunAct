@@ -17,7 +17,7 @@ namespace BehaviorTree
     public class Node
     {
         protected NodeState state;
-        public Node entry_parent;
+        public Node parent;
         protected List<Node> children = new List<Node>();
 
         private Dictionary<string, object> _dataContext = 
@@ -26,7 +26,7 @@ namespace BehaviorTree
 
         public Node()
         {
-            entry_parent = null;
+            parent = null;
         }
         public Node(List<Node> child)
         {
@@ -38,7 +38,7 @@ namespace BehaviorTree
 
         private void Attack(Node node)
         {
-            node.entry_parent = this;
+            node.parent = this;
             children.Add(node);
         }
 
@@ -60,7 +60,7 @@ namespace BehaviorTree
                 return value;
             }
 
-            Node node = entry_parent;
+            Node node = parent;
 
             while(node != null)
             {
@@ -70,7 +70,7 @@ namespace BehaviorTree
                 {
                     return value;
                 }
-                node = node.entry_parent;
+                node = node.parent;
             }
 
             return null;
@@ -85,7 +85,7 @@ namespace BehaviorTree
 
             }
 
-            Node node = entry_parent;
+            Node node = parent;
             while(node != null)
             {
                 bool cleared = node.ClearData(tagName);
@@ -94,7 +94,7 @@ namespace BehaviorTree
                 {
                     return true;
                 }
-                node = node.entry_parent;
+                node = node.parent;
             }
             return false;
         }
