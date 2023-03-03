@@ -39,7 +39,6 @@ namespace Player
 
 
 
-
         //**ジャンプ判定**
         [Header("ジャンプの設定")]
         [Space]
@@ -121,16 +120,13 @@ namespace Player
 
             if (velocity.sqrMagnitude > 1.0f)
             {
-                transform.rotation = Quaternion.Lerp(transform.rotation, rotate, Time.deltaTime);
-
                 rotate = Quaternion.LookRotation(velocity);
             }
 
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, rotate, 500.0f);
+            this.transform.rotation = Quaternion.Slerp(transform.rotation , rotate , Time.deltaTime * _rotationSpeed);
 
             _anim.SetFloat("Speed", velocity.sqrMagnitude);
 
-           
             if(Input.GetKey(KeyCode.LeftShift))
             {
                 var runSpeed = velocity * _runSpeed;
@@ -233,7 +229,6 @@ namespace Player
             {
                 mainCam.LookAt = this.transform;
                 mainCam.GetCinemachineComponent<CinemachineFramingTransposer>().m_CameraDistance = 3;
-                
             }
 
             if(target)
@@ -251,6 +246,20 @@ namespace Player
         //**攻撃しているかどうかの判定**
         public void Attack()
         {
+            
+            if (Input.GetMouseButtonDown(0) && isAttack == false)
+            {
+                isAttack = true;
+                _anim.SetBool("Attack", true);
+                Debug.Log($"isAttack = {isAttack}");
+
+            }
+            else if (Input.GetMouseButtonUp(0) && isAttack == true)
+            {
+                isAttack = false;
+                _anim.SetBool("Attack", false);
+            }
+
             if (Input.GetMouseButtonDown(1))
             {
                 var newValue_Vertical = mainCam.GetCinemachineComponent<CinemachinePOV>().m_VerticalAxis.Value;
@@ -267,26 +276,21 @@ namespace Player
                 mainCam.Priority = 0;
 
             }
-            else if(Input.GetMouseButtonUp(1))
+            else if (Input.GetMouseButtonUp(1))
             {
+                var attackCamValue_Vertical = attackCam.GetCinemachineComponent<CinemachinePOV>().m_VerticalAxis.Value;
+
+                mainCam.GetCinemachineComponent<CinemachinePOV>().m_VerticalAxis.Value = attackCamValue_Vertical;
+
+                var attackCamValue_Horizontal = attackCam.GetCinemachineComponent<CinemachinePOV>().m_HorizontalAxis.Value;
+
+                mainCam.GetCinemachineComponent<CinemachinePOV>().m_HorizontalAxis.Value = attackCamValue_Horizontal;
+
+
                 mainCam.Priority = 19;
                 attackCam.Priority = 0;
                 secondJumpCam.Priority = 0;
             }
-
-            if(Input.GetMouseButton(0) && isAttack == false)
-            {
-                isAttack = true;
-                _anim.SetBool("Attack", true);
-                Debug.Log($"attackCam.Priority =" + attackCam.Priority);
-
-            }
-            else if(Input.GetMouseButtonUp(1))
-            {
-                isAttack = false;
-                _anim.SetBool("Attack", false);
-            }
-
         }
 
         //**animationのコライダーのON,OFF**
@@ -327,6 +331,4 @@ namespace Player
             }
         }
     }
-
-    
 }
