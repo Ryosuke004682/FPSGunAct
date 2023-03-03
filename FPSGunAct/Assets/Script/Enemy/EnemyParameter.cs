@@ -19,6 +19,8 @@ public class EnemyParameter : Damage_Master
     //[SerializeField] TMPro.TextMeshPro damageText;
     [SerializeField] private Animator _anim;
 
+    [SerializeField] ParticleSystem particle;
+
     void Start()
     {
         _anim = GetComponent<Animator>();
@@ -27,11 +29,13 @@ public class EnemyParameter : Damage_Master
         hpSlider.maxValue = _maxHp;
         hpSlider.value = _maxHp;
 
+        particle.Stop();
     }
 
     private void Update()
     {
         hpSlider.transform.rotation = Camera.main.transform.rotation;
+        particle.transform.rotation = Camera.main.transform.rotation;
         //damageText.transform.rotation = Camera.main.transform.rotation;
     }
 
@@ -62,6 +66,9 @@ public class EnemyParameter : Damage_Master
             {
                 Destroy(this.gameObject , 0f);
             }
+
+          
+
         }
 
         if(other.gameObject.CompareTag("Sword"))
@@ -72,8 +79,19 @@ public class EnemyParameter : Damage_Master
 
             Debug.Log($"åïÇÃÉ_ÉÅÅ[ÉWó  = {damage}");
             _nowHP -= damage;
+
+            particle = Instantiate(particle);
+
+            particle.transform.position = this.transform.position + new Vector3(0f,0f,-0.5f);
+
+            particle.transform.rotation = Quaternion.Euler(0f , 180f,UnityEngine.Random.Range(0f , 360f));
+
+            particle.Play();
+            Debug.Log(particle + "çƒê∂Ç≥ÇÍÇƒÇÈÇÊ");
+
+
         }
 
-
+       
     }
 }

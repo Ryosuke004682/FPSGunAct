@@ -253,6 +253,15 @@ namespace Player
         {
             if (Input.GetMouseButtonDown(1))
             {
+                var newValue_Vertical = mainCam.GetCinemachineComponent<CinemachinePOV>().m_VerticalAxis.Value;
+
+                attackCam.GetCinemachineComponent<CinemachinePOV>().m_VerticalAxis.Value = newValue_Vertical;
+
+                var newValue_Horizontal = mainCam.GetCinemachineComponent<CinemachinePOV>().m_HorizontalAxis.Value;
+
+                attackCam.GetCinemachineComponent<CinemachinePOV>().m_HorizontalAxis.Value = newValue_Horizontal;
+
+
                 attackCam.Priority = 17;
                 secondJumpCam.Priority = 0;
                 mainCam.Priority = 0;
@@ -265,7 +274,7 @@ namespace Player
                 secondJumpCam.Priority = 0;
             }
 
-            if(Input.GetMouseButtonDown(0) && isAttack == false)
+            if(Input.GetMouseButton(0) && isAttack == false)
             {
                 isAttack = true;
                 _anim.SetBool("Attack", true);
@@ -286,7 +295,7 @@ namespace Player
             attackCollider.enabled = true;
 
             if (attackCollider.enabled == true)
-            {//パーティクル系を入れるとこ
+            {//剣の軌跡系のパーティクルを入れるとこ
             }
             else
             { }
