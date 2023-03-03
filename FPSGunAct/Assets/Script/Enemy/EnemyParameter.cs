@@ -12,7 +12,12 @@ public class EnemyParameter : Damage_Master
     [SerializeField] private int _nowHP;
 
     [SerializeField, Tooltip("プレイヤーのヒットストップの時間")]
-    private float _hitStopTime = 0.2f;
+    private float _swordHitTime = 0.8f;
+
+    [SerializeField, Tooltip("弾が当たった時のヒットストップ")]
+    private float _bulletHitStop = 0.02f;
+
+
 
 
     [SerializeField] Slider hpSlider;
@@ -20,6 +25,7 @@ public class EnemyParameter : Damage_Master
     [SerializeField] private Animator _anim;
 
     [SerializeField] ParticleSystem particle;
+
 
     void Start()
     {
@@ -35,7 +41,7 @@ public class EnemyParameter : Damage_Master
     private void Update()
     {
         hpSlider.transform.rotation = Camera.main.transform.rotation;
-        particle.transform.rotation = Camera.main.transform.rotation;
+     
         //damageText.transform.rotation = Camera.main.transform.rotation;
     }
 
@@ -46,15 +52,47 @@ public class EnemyParameter : Damage_Master
 
     private void OnCollisionEnter(Collision other)
     {
-        if (other.gameObject.CompareTag("Sword") ||
-           other.gameObject.CompareTag("Bullet"))
+
+
+        if (other.gameObject.CompareTag("Sword"))
         {
+            Debug.Log("剣が当たってるよ");
+            _anim.SetInteger("GiveDamage", UnityEngine.Random.Range(1, 5));
+            var damage = UnityEngine.Random.Range(20, 50);
+
+            Debug.Log($"剣のダメージ量 = {damage}");
+            _nowHP -= damage;
+            hpSlider.value = _nowHP;
+
+            var cameraRotation = Camera.main.transform.forward;
+
+            Quaternion rotation = Quaternion.LookRotation(cameraRotation, Vector3.up);
+            Quaternion randomRotation = Quaternion.Euler(0, 0, UnityEngine.Random.Range(0, 360));
+
+            particle.transform.position = this.transform.position;
+            particle.transform.rotation = randomRotation * rotation;
+
+            Debug.Log("andomRotation" + randomRotation);
+
+
+            HitStopContoroller.hitStop.Stop(_swordHitTime);
+            particle.Play();
+            Debug.Log(particle + "再生されてるよ");
+
+            if (_nowHP <= 0)
+            {
+                Destroy(this.gameObject, 0f);
+            }
+        }
+
+
+        if (other.gameObject.CompareTag("Bullet"))
+        {
+            HitStopContoroller.hitStop.Stop(_bulletHitStop);
 
             _anim.SetInteger("GiveDamage", UnityEngine.Random.Range(1, 5));
             var damage = UnityEngine.Random.Range(1,3);
-           
-
-            Debug.Log($"いまの" + damage);
+            
             
             _nowHP -= damage;
             hpSlider.value = _nowHP;
@@ -65,33 +103,7 @@ public class EnemyParameter : Damage_Master
             if(_nowHP <= 0)
             {
                 Destroy(this.gameObject , 0f);
-            }
-
-          
-
+            } 
         }
-
-        if(other.gameObject.CompareTag("Sword"))
-        {
-            Debug.Log("剣が当たってるよ");
-            _anim.SetInteger("GiveDamage", UnityEngine.Random.Range(1, 5));
-            var damage = UnityEngine.Random.Range(20 , 50);
-
-            Debug.Log($"剣のダメージ量 = {damage}");
-            _nowHP -= damage;
-
-            particle = Instantiate(particle);
-
-            particle.transform.position = this.transform.position + new Vector3(0f,0f,-0.5f);
-
-            particle.transform.rotation = Quaternion.Euler(0f , 180f,UnityEngine.Random.Range(0f , 360f));
-
-            particle.Play();
-            Debug.Log(particle + "再生されてるよ");
-
-
-        }
-
-       
     }
 }

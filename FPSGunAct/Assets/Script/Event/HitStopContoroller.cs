@@ -22,10 +22,7 @@ public class HitStopContoroller : MonoBehaviour
     private IEnumerator HitStopAct(float stopFrame)
     {
         Time.timeScale = 0;
-        yield return new WaitForSeconds(stopFrame);
+        yield return new WaitForSecondsRealtime(stopFrame);
         Time.timeScale = 1;
-
-
-
     }
 }
