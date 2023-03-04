@@ -1,81 +1,84 @@
 using Cinemachine;
 using DG.Tweening;
 using UnityEngine;
-using UnityEngine.InputSystem.HID;
-using UnityEngine.UIElements;
 
+//Move、Attack、Jump
 namespace Player
 {
     [RequireComponent(typeof(Rigidbody))]
-    public class PlayerControl : MonoBehaviour
+    public class PlayerCore : MonoBehaviour
     {
         [Header("Playerの設定")]
         [Space]
-        [SerializeField, Header("Playerの通常の速度")]   private float _speed = 2.0f;
-        [SerializeField, Header("Playerの走るスピード")] private float _runSpeed = 5.0f;
-        [SerializeField, Header("重力")] private float fallSpeed = 5.0f;
+        [SerializeField, Header("Playerの通常の速度")]   public static float _speed = 4.0f;
+        [SerializeField, Header("Playerの走るスピード")] public static float _runSpeed = 8.0f;
+        [SerializeField, Header("空中にいるときの移動量")] public float _airMovement = 3.0f;
+        [SerializeField,Header("走る時のキー")] protected KeyCode inputSprintKey = KeyCode.LeftShift;
 
 
         //**攻撃、防御のパラメーター設定**
         [Header("攻撃の事、防御力の事")]
         [Space]
-        [SerializeField, Tooltip("攻撃力")] private int _attackPower = 50;
-        [SerializeField, Tooltip("防御力")] private int _defence = 20;
+        [SerializeField, Tooltip("攻撃力")] protected int _attackPower = 50;
+        [SerializeField, Tooltip("防御力")] protected int _defence = 20;
 
-        bool isAttack;
-        bool isHit;
+        protected bool isAttack;
+        protected bool isHit;
 
         public Collider attackCollider;
 
         //**カメラ設定**
         [Header("カメラの設定")]
         [Space]
-        [SerializeField, Header("カメラの回転量")] public float _rotationSpeed = 500;
-        [SerializeField, Header("メインカメラ")]   public  CinemachineVirtualCamera mainCam;
-        [SerializeField, Header("最初のジャンプのカメラ")] public  CinemachineVirtualCamera secondJumpCam;
-        [SerializeField, Header("攻撃用のカメラ")] public  CinemachineVirtualCamera attackCam;
-        [SerializeField, Header("ロックオンするときのキー")] private KeyCode lockOnKey = KeyCode.R;
-        [SerializeField, Header("ロックオン解除するときのキー")] private KeyCode lockOnRelese = KeyCode.LeftControl;
+        [SerializeField, Header("カメラの回転量")] protected float _rotationSpeed = 500;
+        [SerializeField, Header("メインカメラ")] protected CinemachineVirtualCamera mainCam;
+        [SerializeField, Header("最初のジャンプのカメラ")] protected CinemachineVirtualCamera secondJumpCam;
+        [SerializeField, Header("攻撃用のカメラ")] protected CinemachineVirtualCamera attackCam;
+        [SerializeField, Header("ロックオンするときのキー")] protected KeyCode lockOnKey = KeyCode.R;
+        [SerializeField, Header("ロックオン解除するときのキー")] protected KeyCode lockOnRelese = KeyCode.LeftControl;
 
 
 
         //**ジャンプ判定**
         [Header("ジャンプの設定")]
         [Space]
-        [SerializeField, Header("ジャンプ力")] private float _jumpPower = 5.0f;
-        [SerializeField, Header("二段ジャンプ目の力")] private float _secondJumpPower = 5.0f;
+        [SerializeField, Header("ジャンプ力")] protected float _jumpPower = 5.0f;
+        [SerializeField, Header("二段ジャンプ目の力")] protected float _secondJumpPower = 5.0f;
 
-        public int _jumpCount = 0;
-        const int MAXJUMPCOUNT = 2;
-        bool isJump_Frag;
-        bool isSecondJump_Flag = false;
+        protected int _jumpCount = 0;
+        protected const int MAXJUMPCOUNT = 2;
+        protected bool isJump_Frag;
+        protected bool isSecondJump_Flag = false;
+        protected bool isGrounded = false;
 
 
         //**エフェクト周り**
         [Header("エフェクト")]
         [Space]
-        [SerializeField, Header("攻撃用エフェクト")] private ParticleSystem attackPTL; //PTL = particle
-
+        [SerializeField, Header("攻撃用エフェクト")] protected ParticleSystem attackPTL; //PTL = particle
 
         //**接地判定**
         //LayerMask groundLayer = 0;
         //private float groundDistance = 0.1f;
 
-
         //**コンポーネント**
-        AudioSource _source;
-        AudioClip[] clips;
-        Rigidbody rb;
-        Animator _anim;
-        Quaternion rotate;
+        protected AudioSource _source;
+        protected AudioClip[] clips;
+        protected static Rigidbody rb;
+        protected static Animator _anim;
 
 
         //**ロックオンの事**
-        public EnemyListManager enemyListManager;
-        public Transform target;
-        public int targetCount;
+        protected EnemyListManager enemyListManager;
+        protected Transform target;
+        protected int targetCount;
 
-        Pod_Attack podAttack;
+        protected Pod_Attack podAttack;
+
+
+        public Vector3 camForward;
+        protected Quaternion playerTransform;
+
 
         private void Start()
         {
@@ -89,7 +92,8 @@ namespace Player
             rb = GetComponent<Rigidbody>();
             rb.freezeRotation = true;
 
-            rotate = transform.rotation;
+            playerTransform = transform.rotation;
+            
 
             mainCam.Priority = 19;
             
@@ -97,6 +101,7 @@ namespace Player
 
         private void Update()
         {
+           
             Jump();
             Attack();
             TargetLockOn();
@@ -104,44 +109,8 @@ namespace Player
 
         private void FixedUpdate()
         {
-            PlayerCore();
-        }
-
-        void PlayerCore()
-        {
-            var vertical = Input.GetAxis("Vertical");
-            var horizontal = Input.GetAxis("Horizontal");
-
-            var horizontalRotate = Quaternion.AngleAxis(Camera.main.transform.eulerAngles.y, Vector3.up);
-            
-            var velocity = horizontalRotate * new Vector3(horizontal, 0, vertical).normalized;
-
-            //var newRotationSpeed = _rotationSpeed * Time.deltaTime;
-
-            if (velocity.sqrMagnitude > 1.0f)
-            {
-                rotate = Quaternion.LookRotation(velocity);
-            }
-
-            this.transform.rotation = Quaternion.Slerp(transform.rotation , rotate , Time.deltaTime * _rotationSpeed);
-
-            _anim.SetFloat("Speed", velocity.sqrMagnitude);
-
-            if(Input.GetKey(KeyCode.LeftShift))
-            {
-                var runSpeed = velocity * _runSpeed;
-                rb.velocity = runSpeed;
-
-                _anim.SetBool("SprintSpeed" , true);
-            }
-            else
-            {
-                var nomalSpeed = velocity * _speed;
-                rb.velocity = nomalSpeed;
-
-                _anim.SetBool("SprintSpeed" , false);
-            }
-
+            Move.Control(_airMovement, isGrounded, inputSprintKey);
+            Move.PlayerRotate(camForward , playerTransform , transform , _rotationSpeed);
         }
 
         //重力
@@ -277,6 +246,7 @@ namespace Player
 
             }
             else if (Input.GetMouseButtonUp(1))
+
             {
                 var attackCamValue_Vertical = attackCam.GetCinemachineComponent<CinemachinePOV>().m_VerticalAxis.Value;
 
