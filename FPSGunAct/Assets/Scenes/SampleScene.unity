@@ -5867,11 +5867,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1468856521005169074, guid: ffa823c94278ffd498ca13e69b1ac116, type: 3}
       propertyPath: _swordHitTime
-      value: 0.08
+      value: 0.09
       objectReference: {fileID: 0}
     - target: {fileID: 1468856521005169074, guid: ffa823c94278ffd498ca13e69b1ac116, type: 3}
       propertyPath: _bulletHitStop
-      value: 0.03
+      value: 0.01
       objectReference: {fileID: 0}
     - target: {fileID: 1908262057377977129, guid: ffa823c94278ffd498ca13e69b1ac116, type: 3}
       propertyPath: m_AnchorMax.x
@@ -6132,11 +6132,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1468856521005169074, guid: ffa823c94278ffd498ca13e69b1ac116, type: 3}
       propertyPath: _swordHitTime
-      value: 0.08
+      value: 0.09
       objectReference: {fileID: 0}
     - target: {fileID: 1468856521005169074, guid: ffa823c94278ffd498ca13e69b1ac116, type: 3}
       propertyPath: _bulletHitStop
-      value: 0.03
+      value: 0.01
       objectReference: {fileID: 0}
     - target: {fileID: 1908262057377977129, guid: ffa823c94278ffd498ca13e69b1ac116, type: 3}
       propertyPath: m_AnchorMax.x
@@ -14670,11 +14670,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1468856521005169074, guid: ffa823c94278ffd498ca13e69b1ac116, type: 3}
       propertyPath: _swordHitTime
-      value: 0.08
+      value: 0.09
       objectReference: {fileID: 0}
     - target: {fileID: 1468856521005169074, guid: ffa823c94278ffd498ca13e69b1ac116, type: 3}
       propertyPath: _bulletHitStop
-      value: 0.03
+      value: 0.01
       objectReference: {fileID: 0}
     - target: {fileID: 1908262057377977129, guid: ffa823c94278ffd498ca13e69b1ac116, type: 3}
       propertyPath: m_AnchorMax.x
@@ -18457,8 +18457,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _maxHp: 500
   _nowHP: 0
-  _swordHitTime: 0.12
-  _bulletHitStop: 0.03
+  _swordHitTime: 0.09
+  _bulletHitStop: 0.01
   hpSlider: {fileID: 1778015702}
   _anim: {fileID: 0}
   particle: {fileID: 1275497763}
@@ -23276,11 +23276,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1468856521005169074, guid: ffa823c94278ffd498ca13e69b1ac116, type: 3}
       propertyPath: _swordHitTime
-      value: 0.08
+      value: 0.09
       objectReference: {fileID: 0}
     - target: {fileID: 1468856521005169074, guid: ffa823c94278ffd498ca13e69b1ac116, type: 3}
       propertyPath: _bulletHitStop
-      value: 0.03
+      value: 0.01
       objectReference: {fileID: 0}
     - target: {fileID: 1908262057377977129, guid: ffa823c94278ffd498ca13e69b1ac116, type: 3}
       propertyPath: m_AnchorMax.x
@@ -23398,10 +23398,11 @@ MonoBehaviour:
   _speed: 5
   _runSpeed: 9
   fallSpeed: 0
+  inputSprintKey: 304
   _attackPower: 50
   _defence: 20
   attackCollider: {fileID: 1806947012}
-  _rotationSpeed: 20
+  _rotationSpeed: 1000
   mainCam: {fileID: 169935366}
   secondJumpCam: {fileID: 2103326186}
   attackCam: {fileID: 1385817503}
@@ -23409,11 +23410,7 @@ MonoBehaviour:
   lockOnRelese: 306
   _jumpPower: 20
   _secondJumpPower: 50
-  _jumpCount: 0
   attackPTL: {fileID: 0}
-  enemyListManager: {fileID: 921025035}
-  target: {fileID: 0}
-  targetCount: 0
 --- !u!82 &6774320899035411658
 AudioSource:
   m_ObjectHideFlags: 0
