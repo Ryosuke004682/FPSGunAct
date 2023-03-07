@@ -19360,7 +19360,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8172022909399306373, guid: ffb668ec8ff9af9478a704ccbb78a2ca, type: 3}
       propertyPath: m_TagString
-      value: Untagged
+      value: Enemy2
       objectReference: {fileID: 0}
     - target: {fileID: 8747749830010395782, guid: ffb668ec8ff9af9478a704ccbb78a2ca, type: 3}
       propertyPath: m_IsTrigger
@@ -23395,22 +23395,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2cd823965e9a524288501db36286626, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 5
-  _runSpeed: 9
-  fallSpeed: 0
-  inputSprintKey: 304
+  _speed: 2
+  _runSpeed: 3.5
+  _airMovement: 3
+  inputKey: 304
   _attackPower: 50
   _defence: 20
   attackCollider: {fileID: 1806947012}
-  _rotationSpeed: 1000
-  mainCam: {fileID: 169935366}
-  secondJumpCam: {fileID: 2103326186}
-  attackCam: {fileID: 1385817503}
-  lockOnKey: 114
-  lockOnRelese: 306
   _jumpPower: 20
   _secondJumpPower: 50
+  _inputJumpKey: 32
   attackPTL: {fileID: 0}
+  camForward: {x: 0, y: 0, z: 0}
 --- !u!82 &6774320899035411658
 AudioSource:
   m_ObjectHideFlags: 0
@@ -23532,6 +23528,21 @@ MonoBehaviour:
     audioClips: []
   terrainLayerToTag: []
   pitchRange: 1
+--- !u!114 &6774320899035411662
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 263676697236157440}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24c49dd294ffb9a47acb9ea2088f2119, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainCam: {fileID: 169935366}
+  jumpCam: {fileID: 2103326186}
+  attackCam: {fileID: 1385817503}
 --- !u!1001 &8473579545707791848
 PrefabInstance:
   m_ObjectHideFlags: 0
