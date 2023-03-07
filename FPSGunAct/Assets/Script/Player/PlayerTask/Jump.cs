@@ -19,7 +19,7 @@ public class Jump : PlayerCore
 
             if (_jumpCount == MAXJUMPCOUNT && isJump_Frag == true)
             {
-                PlayerCameraController.Instance.JumpCameraWark();
+                PlayerCameraController.CameraInstance.JumpCameraWark();
                 isSecondJump_Flag = true;
 
                 rb.AddForce(velocity * Instance._secondJumpPower , ForceMode.Impulse);
