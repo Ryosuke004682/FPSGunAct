@@ -16,12 +16,12 @@ public class PlayerCameraController : MonoBehaviour
     private CinemachinePOV jumpCamPOV;
 
     //ƒVƒ“ƒOƒ‹ƒgƒ“
-    public static PlayerCameraController Instance;
+    public static PlayerCameraController CameraInstance;
     private void Awake()
     {
-        if (Instance == null)
+        if (CameraInstance == null)
         {
-            Instance = this;
+            CameraInstance = this;
             Debug.Log("ŒÄ‚×‚Ä‚é‚æ");
         }
     }

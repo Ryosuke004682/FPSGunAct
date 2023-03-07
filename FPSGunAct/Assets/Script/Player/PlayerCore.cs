@@ -16,6 +16,8 @@ namespace Player
 
         [SerializeField, Header("空中にいるときの移動量")] public float _airMovement = 3.0f;
 
+        [SerializeField, Header("カメラの回転速度")] public float _rotationSpeed = 10.0f;
+
         [SerializeField,Header("走る時のキー")] protected KeyCode inputKey = KeyCode.LeftShift;
 
 
@@ -55,22 +57,18 @@ namespace Player
         //private float groundDistance = 0.1f;
 
         //**コンポーネント**
-        protected AudioSource _source;
-        protected AudioClip[] clips;
-        protected static Rigidbody rb;
-        protected static Animator _anim;
+        public AudioSource _source;
+        public AudioClip[] clips;
+        public static Rigidbody rb;
+        public static Animator _anim;
 
 
         //**ロックオンの事**
-        protected EnemyListManager enemyListManager;
-        protected Transform target;
-        protected int targetCount;
+        public EnemyListManager enemyListManager;
+        public Transform target;
+        public int targetCount;
 
-        protected Pod_Attack podAttack;
-
-
-        public Vector3 camForward;
-        protected Quaternion playerTransform;
+        private Pod_Attack podAttack;
 
 
         //シングルトン
@@ -91,9 +89,8 @@ namespace Player
             _source = GetComponent<AudioSource>();
             _anim = GetComponent<Animator>();
             rb = GetComponent<Rigidbody>();
-            
+
             rb.freezeRotation = true;
-            playerTransform = transform.rotation;
         }
 
         private void Update()
@@ -109,7 +106,7 @@ namespace Player
         private void FixedUpdate()
         {
             Move.Control(_airMovement, isGrounded, inputKey);
-            Move.PlayerRotate(camForward, playerTransform, transform);
+            //Move.PlayerRotate(camForward, playerTransform, transform);
         }
 
         //**animationのコライダーのON,OFF**
@@ -138,7 +135,7 @@ namespace Player
             {
                 Debug.Log("True");
                 //ここに二段ジャンプ後にカメラをもとに戻すためのプロパティをいれる。
-                PlayerCameraController.Instance.NomalCameraWark();
+                PlayerCameraController.CameraInstance.NomalCameraWark();
             }
         }
     }

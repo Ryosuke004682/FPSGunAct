@@ -23,13 +23,13 @@ public class Attack : PlayerCore
 
         if (Input.GetMouseButtonDown(1))
         {
-            PlayerCameraController.Instance.AttackCameraWark();
+            PlayerCameraController.CameraInstance.AttackCameraWark();
 
         }
         else if (Input.GetMouseButtonUp(1))
         {
             //ここに通常のカメラワークを入れる。
-            PlayerCameraController.Instance.NomalCameraWark();
+            PlayerCameraController.CameraInstance.NomalCameraWark();
 
         }
     }
