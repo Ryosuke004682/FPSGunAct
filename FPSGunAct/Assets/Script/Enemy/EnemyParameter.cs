@@ -67,7 +67,7 @@ public class EnemyParameter : Damage_Master
             var cameraRotation = Camera.main.transform.forward;
 
             Quaternion rotation = Quaternion.LookRotation(cameraRotation, Vector3.up);
-            Quaternion randomRotation = Quaternion.Euler(0, 0, UnityEngine.Random.Range(0, 360));
+            Quaternion randomRotation = Quaternion.Euler(0, 180f, UnityEngine.Random.Range(0, 360));
 
             particle.transform.position = this.transform.position;
             particle.transform.rotation = randomRotation * rotation;

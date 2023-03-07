@@ -2,11 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Player;
-using UnityEngine.UIElements;
-using Unity.VisualScripting;
 
 public class Move : PlayerCore
 {
+
     public static void Control(float airMovementMul, bool isGrounded , KeyCode inputKey)
     {
         var vertical = Input.GetAxis("Vertical");
@@ -29,11 +28,12 @@ public class Move : PlayerCore
         }
         movementDirection.Normalize();
 
-        var currentSpeed = _speed;
-        
-        if(Input.GetKey(inputKey))
+        var currentSpeed = PlayerCore.Instance._speed;
+
+
+        if (Input.GetKey(inputKey))
         {
-            currentSpeed = _runSpeed;
+            currentSpeed = PlayerCore.Instance._runSpeed;
         }
 
 
@@ -44,21 +44,22 @@ public class Move : PlayerCore
             velocity *= airMovementMul;//空中に居るときのスピード
         }
 
-        rb.velocity = new Vector3(velocity.x , rb.velocity.y , velocity.z);
-
+        rb.velocity = new Vector3(velocity.x, rb.velocity.y, velocity.z);
         _anim.SetFloat("Speed" , velocity.sqrMagnitude);
 
     }
 
-    public static void PlayerRotate(Vector3 camForward , Quaternion rotate ,Transform transform, float rotateSpeed)
+    public static void PlayerRotate(Vector3 camForward , Quaternion rotate ,Transform transform)
     {
+        var rotateSpeed = 500;
+
         if (Camera.main != null)
         {
             camForward.y = 0.0f;
-            Quaternion targetRotation = Quaternion.LookRotation(camForward);
+            rotate = Quaternion.LookRotation(camForward);
 
            
-            transform.rotation = Quaternion.Slerp(transform.rotation , targetRotation , Time.deltaTime * rotateSpeed);
+            transform.rotation = Quaternion.Slerp(transform.rotation ,  rotate, Time.deltaTime * rotateSpeed);
         }
     }
 }
