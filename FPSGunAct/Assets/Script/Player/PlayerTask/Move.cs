@@ -24,23 +24,20 @@ public class Move : PlayerCore
             camForward.y = 0.0f;
             camForward.Normalize();
 
-
             movementDirection = (camForward * vertical) + (camRight * horizontal);
 
-            
+
             if (isRun == false)
             {
                 _anim.SetFloat("Speed", movementDirection.sqrMagnitude);
                 _anim.SetBool("SprintSpeed", false);
             }
 
-
             if(movementDirection.sqrMagnitude > 0.01f)
             {
                 var lookRotation = Quaternion.LookRotation(movementDirection);
 
                 Instance.transform.rotation = Quaternion.Slerp(Instance.transform.rotation, lookRotation, Time.deltaTime * Instance._rotationSpeed);
-
             }
 
         }
@@ -53,10 +50,7 @@ public class Move : PlayerCore
         movementDirection.Normalize();
 
 
-
-
         var currentSpeed = Instance._speed; //Instance = PlayerCore.Instance
-
 
         if (Input.GetKey(inputKey))
         {
@@ -71,7 +65,6 @@ public class Move : PlayerCore
 
 
         var velocity = movementDirection * currentSpeed;
-
 
         if (!isGrounded)
         {
