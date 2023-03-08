@@ -5,6 +5,13 @@ using UnityEngine;
 //Move、Attack、Jump
 namespace Player
 {
+    /*
+     メンバ変数には[_]アンダースコアを付けてる。
+     定数は全部大文字
+     bool変数には、「is～」を付けてる。
+     イベント関数には、「On～」を付けてる。
+     */
+
     [RequireComponent(typeof(Rigidbody))]
     public class PlayerCore : MonoBehaviour
     {
@@ -52,9 +59,16 @@ namespace Player
         [Space]
         [SerializeField, Header("攻撃用エフェクト")] protected ParticleSystem attackPTL; //PTL = particle
 
-        //**接地判定**
-        //LayerMask groundLayer = 0;
-        //private float groundDistance = 0.1f;
+
+        [Header("接地判定、登れる段差の設定")]
+        [Space]
+        [SerializeField, Header("段差をのぼるためのレイを飛ばす")] private Transform transform;
+        [SerializeField, Header("レイの距離")] private float _rayDistance = 10.0f;
+        [SerializeField, Header("登れる段差 (地面からのレイの長さ)")] private float _stepOffSet = 0.5f;
+        [SerializeField, Header("登れる角度")] private float _angle = 70.0f;
+
+        int layermask;
+
 
         //**コンポーネント**
         public AudioSource _source;
@@ -91,14 +105,15 @@ namespace Player
             rb = GetComponent<Rigidbody>();
 
             rb.freezeRotation = true;
+
+            layermask = ~(1 << LayerMask.NameToLayer("Player"));//プレイヤータグ以外のレイヤー全部
+
         }
 
         private void Update()
         {
             //**攻撃関連**
             Attack.PlayerAttack();
-           
-
             Jump.PlayerJump(_inputJumpKey);
            
         }
@@ -106,7 +121,7 @@ namespace Player
         private void FixedUpdate()
         {
             Move.Control(_airMovement, isGrounded, inputKey);
-            //Move.PlayerRotate(camForward, playerTransform, transform);
+            
         }
 
         //**animationのコライダーのON,OFF**
@@ -130,12 +145,10 @@ namespace Player
         //**当たり判定全般**
         private void OnCollisionEnter(Collision other)
         {
-            
             if (other.gameObject.CompareTag("Ground"))
             {
                 Debug.Log("True");
-                //ここに二段ジャンプ後にカメラをもとに戻すためのプロパティをいれる。
-                PlayerCameraController.CameraInstance.NomalCameraWark();
+                PlayerCameraController.CameraInstance.NomalCameraWark();//未実装
             }
         }
     }
