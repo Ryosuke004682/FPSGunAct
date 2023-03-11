@@ -47,14 +47,6 @@ public class Game_Event2 : MonoBehaviour
         {
             yield return new WaitForSeconds(2);
             anim.SetBool(stateParameterName, true);
-
-            source.playOnAwake = true;
-
-            if(source.playOnAwake)
-            {
-                PlaySE();
-                source.playOnAwake = false;
-            }
         }
     }
 }

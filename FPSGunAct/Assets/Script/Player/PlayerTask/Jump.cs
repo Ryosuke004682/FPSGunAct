@@ -9,12 +9,12 @@ public class Jump : PlayerCore
     {
         var velocity = Vector3.up;
 
-        if(Input.GetKeyDown(keyCode) && _jumpCount < MAXJUMPCOUNT)
+        if (Input.GetKeyDown(keyCode) && _jumpCount < MAXJUMPCOUNT)
         {
             isJump_Frag = true;
-            rb.AddForce(velocity * Instance._jumpPower , ForceMode.Impulse);
+            rb.AddForce(velocity * Instance._jumpPower, ForceMode.Impulse);
 
-            _anim.SetBool("Jump" , true);
+            _anim.SetBool("Jump", true);
             _jumpCount++;
 
             if (_jumpCount == MAXJUMPCOUNT && isJump_Frag == true)
@@ -22,16 +22,18 @@ public class Jump : PlayerCore
                 PlayerCameraController.CameraInstance.JumpCameraWark();
                 isSecondJump_Flag = true;
 
-                rb.AddForce(velocity * Instance._secondJumpPower , ForceMode.Impulse);
-                _anim.SetBool("SecondJump" , true);
+                rb.AddForce(velocity * Instance._secondJumpPower, ForceMode.Impulse);
+                _anim.SetBool("SecondJump", true);
             }
         }
         else
         {
-            _anim.SetBool("Jump" , false);
+            _anim.SetBool("Jump", false);
             _anim.SetBool("SecondJump", false);
         }
-
-
+    }
+    public static void ResetJump()
+    {
+        _jumpCount = 0;
     }
 }

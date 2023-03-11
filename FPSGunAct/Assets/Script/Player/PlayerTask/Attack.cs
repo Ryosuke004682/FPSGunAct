@@ -7,7 +7,6 @@ using UnityEngine;
 
 public class Attack : PlayerCore
 {
-
     public static void PlayerAttack()
     {
         if (Input.GetMouseButtonDown(0))
@@ -23,6 +22,7 @@ public class Attack : PlayerCore
 
         if (Input.GetMouseButtonDown(1))
         {
+            Debug.Log("押されてるよ");
             PlayerCameraController.CameraInstance.AttackCameraWark();
 
         }
@@ -30,7 +30,6 @@ public class Attack : PlayerCore
         {
             //ここに通常のカメラワークを入れる。
             PlayerCameraController.CameraInstance.NomalCameraWark();
-
         }
     }
 }
