@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Player;
 using UnityEngine.UIElements;
+using Unity.VisualScripting;
 
 public class Move : PlayerCore
 {
@@ -39,7 +40,6 @@ public class Move : PlayerCore
 
                 Instance.transform.rotation = Quaternion.Slerp(Instance.transform.rotation, lookRotation, Time.deltaTime * Instance._rotationSpeed);
             }
-
         }
         else
         {
@@ -62,7 +62,6 @@ public class Move : PlayerCore
                 _anim.SetBool("SprintSpeed", true);
             }
         }
-
 
         var velocity = movementDirection * currentSpeed;
 

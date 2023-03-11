@@ -30,13 +30,15 @@ public class PlayerCameraController : MonoBehaviour
     {
         mainCamPOV = mainCam.GetCinemachineComponent<CinemachinePOV>();
         jumpCamPOV = jumpCam.GetCinemachineComponent<CinemachinePOV>();
-        attackCamPOV = attackCam.GetComponent<CinemachinePOV>();
+        attackCamPOV = attackCam.GetCinemachineComponent<CinemachinePOV>();
     }
 
     public void NomalCameraWark()
     {
         //‚¢‚Â‚à‚Ì‚â‚Â‰f‚µ‚Ä‚é‚â‚Â
-        //var mainCam = 
+        mainCam.Priority   = 19;
+        jumpCam.Priority   = 0;
+        attackCam.Priority = 0;
     }
 
 
@@ -47,7 +49,7 @@ public class PlayerCameraController : MonoBehaviour
         attackCamPOV.m_VerticalAxis.Value = attackCamVertical;
 
         var attackCamHorizontal = mainCamPOV.m_HorizontalAxis.Value;
-        attackCamPOV.m_VerticalAxis.Value = attackCamHorizontal;
+        attackCamPOV.m_HorizontalAxis.Value = attackCamHorizontal;
 
         attackCam.Priority = 17;
         jumpCam.Priority = 0;

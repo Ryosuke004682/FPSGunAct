@@ -4,11 +4,11 @@ using System.Collections;
 [RequireComponent(typeof(SphereCollider))]
 public class RelayTrigger : MonoBehaviour
 {
-    private SoundManager ft_SE;
+    private WalkingSE ft_SE;
 
     private void Awake()
     {
-        ft_SE = transform.root.gameObject.GetComponent<SoundManager>();
+        ft_SE = transform.root.gameObject.GetComponent<WalkingSE>();
     }
 
     private void OnTriggerEnter(Collider other)
