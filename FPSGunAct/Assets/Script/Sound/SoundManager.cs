@@ -26,20 +26,20 @@ namespace Sound
             Boss
         };
 
-        public AudioClip[] seList;
+        public AudioClip[] attackSE;
 
-        public enum SE
+        public enum AttackSE
         {
+            Pod_Shooting,
             Attack1,
             Attack2,
-            Attack3,
-            Attack4,
-            Attack5,
-            Attack6,
-            Attack7,
-            Attack8,
-            Attack9,
-            shooting
+        };
+
+        public AudioClip breackSE;
+
+        public enum Breack
+        {
+            BreackSE
         };
 
 

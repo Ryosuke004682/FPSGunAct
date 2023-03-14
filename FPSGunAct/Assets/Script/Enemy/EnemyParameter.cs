@@ -13,6 +13,10 @@ public class EnemyParameter : SwordParameter
     [SerializeField] private AudioSource _source;
     [SerializeField] private AudioClip[] _clips;
 
+
+    [SerializeField] private AudioSource _breackSource;
+    [SerializeField] private AudioClip _breackClip;
+    
     private int randomSE;
     
     public bool isLastKillMotion = false; //ラストキルを入れたい場合は、trueにする。
@@ -50,14 +54,13 @@ public class EnemyParameter : SwordParameter
 
             var damage = UnityEngine.Random.Range(SwordInstance.attackMin, SwordInstance.attackMax);//ダメージはSwordParameterから変更可能
 
-            Debug.Log($"ダメージ + {damage}");
-
             hpSlider.value -= damage;
             _nowHP -= damage;
 
 
-            randomSE = Random.Range(0 , _clips.Length); 
+            randomSE = Random.Range( 0 , _clips.Length);
             _source.PlayOneShot(_clips[randomSE]);
+            
 
             var cameraRotation = Camera.main.transform.forward;
 
@@ -71,10 +74,15 @@ public class EnemyParameter : SwordParameter
             particle.Play();
 
 
-            if (_nowHP <= 0 && isLastKillMotion == true)
+            if (hpSlider.value <= 0 && isLastKillMotion == true)
             {
+
                 _nowHP = 1;
                 hpSlider.value = 1;
+
+                _breackSource.PlayOneShot(_breackClip);
+
+                Debug.Log($"{_breackClip}　が再生されてるよ");
 
                 StartCoroutine(EventStart());
                 Destroy(other.gameObject);

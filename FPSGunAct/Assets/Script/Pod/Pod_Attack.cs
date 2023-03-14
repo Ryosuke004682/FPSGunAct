@@ -40,57 +40,30 @@ public class Pod_Attack : SoundManager
         }
     }
 
-        public void Shot()
+    public void Shot()
+    {
+        time += Time.deltaTime;
+
+        if (time > reLoadTime)
         {
-            time += Time.deltaTime;
 
-            if (time > reLoadTime)
-            {
+            var bulletPosition = ShotPoint.transform.position;
+            var newBallet = Instantiate(Bullet, bulletPosition, transform.rotation);
+            //var direction = newBallet.transform.forward;
 
-                var bulletPosition = ShotPoint.transform.position;
-                var newBallet = Instantiate(Bullet, bulletPosition, transform.rotation);
-                //var direction = newBallet.transform.forward;
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            Vector3 rayPosition = ray.direction;
 
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                Vector3 rayPosition = ray.direction;
+            newBallet.GetComponent<Rigidbody>().AddForce(rayPosition
+           * inJect, ForceMode.Impulse);
 
-                newBallet.GetComponent<Rigidbody>().AddForce(rayPosition
-               * inJect, ForceMode.Impulse);
-
-            randomSound = Random.Range(0, seList.Length);
-            audioSourceSE.PlayOneShot(seList[randomSound]);
+            randomSound = Random.Range(0, attackSE.Length);
+            audioSourceSE.PlayOneShot(attackSE[randomSound]);
 
 
             Destroy(newBallet, 1.0f);
 
-                time = 0;
-            }
+            time = 0;
         }
-
-    private void OnTriggerEnter(Collider other)
-    {
-
-
-        //    if (other.gameObject.CompareTag("Bullet"))
-        //    {
-        //        HitStopContoroller.hitStop.Stop(_bulletHitStop);
-
-        //        _anim.SetInteger("GiveDamage", UnityEngine.Random.Range(1, 5));
-        //        var damage = UnityEngine.Random.Range(1, 3);
-
-
-        //        _nowHP -= damage;
-        //        hpSlider.value = _nowHP;
-
-
-        //        Debug.Log("HP" + hpSlider.value + "--" + _nowHP);
-
-        //        if (_nowHP <= 0)
-        //        {
-        //            Destroy(this.gameObject, 0f);
-        //        }
-
-        //    }
-        //}
     }
 }

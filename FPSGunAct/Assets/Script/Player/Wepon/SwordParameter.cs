@@ -2,7 +2,6 @@ using DG.Tweening;
 using Player;
 using UnityEngine.UI;
 using UnityEngine;
-using static UnityEngine.ParticleSystem;
 
 
 public class SwordParameter : MonoBehaviour
