@@ -22,7 +22,6 @@ public class Attack : PlayerCore
 
         if (Input.GetMouseButtonDown(1))
         {
-            Debug.Log("‰Ÿ‚³‚ê‚Ä‚é‚æ");
             PlayerCameraController.CameraInstance.AttackCameraWark();
 
         }
