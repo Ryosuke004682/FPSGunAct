@@ -85,7 +85,7 @@ namespace Player
         private void Start()
         {
             Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = true;
+            Cursor.visible = false;
 
             _source = GetComponent<AudioSource>();
             _anim = GetComponent<Animator>();
@@ -126,15 +126,6 @@ namespace Player
 
         //åïÇêUÇ¡ÇΩéûÇÃSEÇí«â¡ÇµÇΩÇ¢ÅB
         public void OnAttackSE()
-        {
-            if (clips != null)
-            {
-                a = Random.Range(0, clips.Length);
-            }
-            _source.PlayOneShot(clips[a]);
-
-        }
-        public void OnAttackSEA()
         {
             if (clips != null)
             {

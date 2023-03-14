@@ -16,8 +16,6 @@ public class Pod_Attack : SoundManager
 
     [SerializeField ,Header("射撃スピード")] private float reLoadTime = 0.08f;
 
-    
-
     Quaternion rotation;
 
 
@@ -46,7 +44,6 @@ public class Pod_Attack : SoundManager
 
         if (time > reLoadTime)
         {
-
             var bulletPosition = ShotPoint.transform.position;
             var newBallet = Instantiate(Bullet, bulletPosition, transform.rotation);
             //var direction = newBallet.transform.forward;
@@ -57,12 +54,14 @@ public class Pod_Attack : SoundManager
             newBallet.GetComponent<Rigidbody>().AddForce(rayPosition
            * inJect, ForceMode.Impulse);
 
-            randomSound = Random.Range(0, attackSE.Length);
-            audioSourceSE.PlayOneShot(attackSE[randomSound]);
+            //SEを鳴らす
+            audioSourceSE = GetComponent<AudioSource>();
+            var random = attackSE[0];
+            audioSourceSE.PlayOneShot(random);
 
+            Debug.Log(random　+ "呼ばれてるよ音");
 
             Destroy(newBallet, 1.0f);
-
             time = 0;
         }
     }

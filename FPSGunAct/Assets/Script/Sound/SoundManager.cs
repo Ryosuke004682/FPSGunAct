@@ -32,15 +32,24 @@ namespace Sound
         {
             Pod_Shooting,
             Attack1,
-            Attack2,
+            Attack2
         };
 
-        public AudioClip breackSE;
+        public AudioClip[] breackSE;
 
         public enum Breack
         {
             BreackSE
         };
+
+        public AudioClip[] eventSE;
+
+        public enum GimicEvent
+        { 
+           EventSound1,
+           EventSound2
+        };
+
 
 
         public static SoundManager SoundInstance;
