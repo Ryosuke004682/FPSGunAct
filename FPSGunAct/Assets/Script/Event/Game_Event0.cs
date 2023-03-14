@@ -39,6 +39,7 @@ namespace Event
 
             enemyObject = GameObject.FindGameObjectsWithTag("Enemy1");
 
+
             if (enemyObject.Length == 0)
             {
                 anim.SetBool(stateParameterName, true);

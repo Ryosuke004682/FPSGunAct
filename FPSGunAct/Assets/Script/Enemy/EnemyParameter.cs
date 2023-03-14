@@ -35,11 +35,6 @@ public class EnemyParameter : SwordParameter
         hpSlider.transform.rotation = Camera.main.transform.rotation;
     }
 
-    private void FixedUpdate()
-    {
-        
-    }
-
     IEnumerator EventStart()
     {
         yield return new WaitForSeconds(10.0f);
@@ -76,7 +71,6 @@ public class EnemyParameter : SwordParameter
 
             if (hpSlider.value <= 0 && isLastKillMotion == true)
             {
-
                 _nowHP = 1;
                 hpSlider.value = 1;
 
