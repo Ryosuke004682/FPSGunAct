@@ -5,7 +5,6 @@ using UnityEngine;
 //MoveAAttackAJump
 namespace Player
 {
-
     [RequireComponent(typeof(Rigidbody))]
     public class PlayerCore : MonoBehaviour
     {
@@ -124,7 +123,7 @@ namespace Player
             attackCollider.enabled = false;
         }
 
-        //Œ•‚ğU‚Á‚½‚ÌSE‚ğ’Ç‰Á‚µ‚½‚¢B
+        //Œ•‚ğU‚Á‚½‚ÌSE‚ğ’Ç‰Á
         public void OnAttackSE()
         {
             if (clips != null)

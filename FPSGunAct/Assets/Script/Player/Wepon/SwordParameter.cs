@@ -10,7 +10,7 @@ public class SwordParameter : MonoBehaviour
     public float _swordHitTime = 0.8f;
 
     [SerializeField, Tooltip("弾が当たった時のヒットストップ")]
-    private float _bulletHitStop = 0.02f;
+    public float _bulletHitStop = 0.02f;
 
     [SerializeField] public  ParticleSystem particle;
 

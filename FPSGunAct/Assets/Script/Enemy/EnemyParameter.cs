@@ -35,52 +35,54 @@ public class EnemyParameter : SwordParameter
         hpSlider.transform.rotation = Camera.main.transform.rotation;
     }
 
-    IEnumerator EventStart()
-    {
-        yield return new WaitForSeconds(10.0f);
-    }
-
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("当たってるよん");
         if (other.gameObject.CompareTag("Sword"))
         {
             attackParameter(other);
 
-            var damage = UnityEngine.Random.Range(SwordInstance.attackMin, SwordInstance.attackMax);//ダメージはSwordParameterから変更可能
+            var damage = Random.Range(SwordInstance.attackMin, SwordInstance.attackMax);//ダメージはSwordParameterから変更可能
+
 
             hpSlider.value -= damage;
             _nowHP -= damage;
 
+            hpSlider.value = Mathf.Max(hpSlider.value - damage, 0);
+            _nowHP = Mathf.Max(_nowHP - damage , 0);
 
             randomSE = Random.Range( 0 , _clips.Length);
             _source.PlayOneShot(_clips[randomSE]);
-            
+
 
             var cameraRotation = Camera.main.transform.forward;
 
             Quaternion rotation = Quaternion.LookRotation(cameraRotation, Vector3.up);
-            Quaternion randomRotation = Quaternion.Euler(0, 180f, (Random.Range(0, 360)));
+            Quaternion randomRotation = Quaternion.Euler(0, 0, (Random.Range(0, 360)));
 
-            particle.transform.position = other.transform.position;
+            particle.transform.position = this.transform.position;
             particle.transform.rotation = randomRotation * rotation;
+
 
             HitStopContoroller.hitStop.Stop(_swordHitTime);
             particle.Play();
+        }
 
+        if(other.gameObject.CompareTag("Bullet"))
+        {
+                var damage = Random.Range(1, 5);
 
-            if (hpSlider.value <= 0 && isLastKillMotion == true)
-            {
-                _nowHP = 1;
-                hpSlider.value = 1;
+                hpSlider.value -= damage;
+                _nowHP -= damage;
 
-                _breackSource.PlayOneShot(_breackClip);
+                hpSlider.value = Mathf.Max(hpSlider.value - damage, 0);
+                _nowHP = Mathf.Max(_nowHP - damage, 0);
 
-                Debug.Log($"{_breackClip}　が再生されてるよ");
+                HitStopContoroller.hitStop.Stop(_bulletHitStop);
+        }
 
-                StartCoroutine(EventStart());
-                Destroy(other.gameObject);
-            }
+        if(hpSlider.value == 0 && _nowHP == 0)
+        {
+            Destroy(this.gameObject);
         }
     }
 }
