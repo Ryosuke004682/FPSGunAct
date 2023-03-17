@@ -1,12 +1,15 @@
+using Sound;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Unity.VisualScripting;
 using UnityEditor.UIElements;
 using UnityEngine;
 
 namespace Event
 {
-    public class Game_Event0 : MonoBehaviour
+    public class Game_Event0 : SoundManager
     {
         [SerializeField, Header("“G‚ðŠi”[")]
         private GameObject[] enemyObject;
@@ -21,29 +24,38 @@ namespace Event
         {
             anim = GetComponent<Animator>();
             anim.SetBool(stateParameterName, false);
+
+            StartCoroutine(FirstEvent());
         }
 
-        private void Update()
+        public IEnumerator FirstEvent()
         {
-
-        }
-
-        private void FixedUpdate()
-        {
-            StartCoroutine(Event());
-        }
-
-        public IEnumerator Event()
-        {
-            yield return null;
-
             enemyObject = GameObject.FindGameObjectsWithTag("Enemy1");
 
+            yield return null;
 
-            if (enemyObject.Length == 0)
+            while(enemyObject.Length > 0)
+            {
+
+                GameObject enemyToMove = enemyObject[0];
+                enemyObject = RemoveEnemyFromArray(enemyToMove, enemyObject);
+
+                yield return null;
+            }
+
+          if(enemyObject.Length == 0)
             {
                 anim.SetBool(stateParameterName, true);
+                var thisSE = eventSE[0];
+                audioSourceSE.PlayOneShot(thisSE);
             }
+                
+            
+        }
+
+        private GameObject[] RemoveEnemyFromArray(GameObject enemy,GameObject[] array)
+        {
+            return array.Where(x => x != enemy).ToArray();
         }
     }
 

@@ -47,7 +47,8 @@ namespace Sound
         public enum GimicEvent
         { 
            EventSound1,
-           EventSound2
+           EventSound2,
+           EventSound3,
         };
 
 
