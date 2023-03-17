@@ -140,7 +140,7 @@ namespace Player
             if (other.gameObject.CompareTag("Ground"))
             {
                Jump.ResetJump();
-                      PlayerCameraController.CameraInstance.NomalCameraWark();
+               PlayerCameraController.CameraInstance.NomalCameraWark();
             }
         }
 
