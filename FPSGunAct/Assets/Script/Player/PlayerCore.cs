@@ -30,6 +30,7 @@ namespace Player
         protected static bool isAttack;
         protected static bool isHit;
         public Collider attackCollider;
+        public ParticleSystem swordTrajectory;
 
 
         //**ジャンプ判定**
@@ -114,6 +115,7 @@ namespace Player
 
             if (attackCollider.enabled == true)
             {//剣の軌跡系のパーティクルを入れるとこ
+                swordTrajectory.Play();
             }
         }
 
