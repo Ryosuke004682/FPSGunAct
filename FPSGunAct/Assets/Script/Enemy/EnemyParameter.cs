@@ -8,7 +8,7 @@ using System;
 public class EnemyParameter : SwordParameter
 {
     [SerializeField] public int _maxHp;
-    [SerializeField] public int _nowHP;//明示的に現在のHPを見えるようにするために宣言。
+    [SerializeField] public int _nowHP;//明示的にインスペクタ上で現在のHPを見えるようにするために宣言。
 
     [SerializeField] public Slider hpSlider;
     [SerializeField] private AudioSource _source;

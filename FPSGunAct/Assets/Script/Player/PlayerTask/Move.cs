@@ -4,9 +4,12 @@ using UnityEngine;
 using Player;
 using UnityEngine.UIElements;
 using Unity.VisualScripting;
+using UnityEngine.EventSystems;
 
 public class Move : PlayerCore
 {
+
+    PlayerCore core = null;
 
     public static void Control(float airMovementMul, bool isGrounded, KeyCode inputKey)
     {
@@ -56,7 +59,7 @@ public class Move : PlayerCore
         {
             isRun = true;
 
-            if (isRun == true)
+            if (isRun == true && movementDirection.sqrMagnitude >= 0.8f)
             {
                 currentSpeed = Instance._runSpeed;
                 _anim.SetBool("SprintSpeed", true);
