@@ -12,6 +12,7 @@ TagManager:
   - Sword
   - Water
   - Enemy1
+  - Potal
   layers:
   - Default
   - TransparentFX
