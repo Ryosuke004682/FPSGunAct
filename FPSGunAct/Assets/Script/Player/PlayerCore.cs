@@ -55,7 +55,7 @@ namespace Player
         //**コンポーネント**
         public AudioSource _source;
         public AudioClip[] clips;
-        public int a;
+        public int swordSwingSound;
 
         public static Rigidbody rb;
         public static Animator _anim;
@@ -128,9 +128,9 @@ namespace Player
         {
             if (clips != null)
             {
-                a = Random.Range(0, clips.Length);
+                swordSwingSound = Random.Range(0, clips.Length);
             }
-            _source.PlayOneShot(clips[a]);
+            _source.PlayOneShot(clips[swordSwingSound]);
 
         }
 
