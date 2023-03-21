@@ -3,14 +3,15 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
-public class GameEventAnimation : SoundManager
+public class EventManager : SoundManager
 {
     public const string EVENT1 = "First_Event";
     public const string EVENT2 = "Second_Event";
     public const string EVENT3 = "Third_Event";
-    public const string EVENT4 = "Tutorial_LastEvent";
+    public const string EVENT4 = "Tutorial_LastEvent ";
 
 
     [SerializeField, Header("射撃用の敵を格納")]
@@ -19,7 +20,7 @@ public class GameEventAnimation : SoundManager
     [SerializeField, Header("近接用の敵を格納")]
     private GameObject[] closeEnemy;
 
-    public GameObject playerHolder;
+    public GameObject SecondEventObje;
 
     //イベントアニメーションを追加
     [SerializeField]
@@ -33,6 +34,8 @@ public class GameEventAnimation : SoundManager
     {
         farEnemy   = GameObject.FindGameObjectsWithTag("Enemy1");
         closeEnemy = GameObject.FindGameObjectsWithTag("Enemy2");
+
+        SecondEventObje.SetActive(false);
     }
 
 
@@ -42,19 +45,6 @@ public class GameEventAnimation : SoundManager
         animations[1].SetBool(EVENT2, false);
         animations[2].SetBool(EVENT3, false);
         animations[3].SetBool(EVENT4, false);
-
-
-        foreach (var anims in GetComponentsInChildren<Animator>())
-        {
-            animations.Add(anims);
-        }
-        audioSourceSE = GetComponent<AudioSource>();
-
-
-        Debug.Log($"呼ばれてるよ + {StartCoroutine(AnimEvent())}");
-
-       StartCoroutine(AnimEvent());
-       StartCoroutine(LastEvent());
     }
 
     private void Update()
@@ -63,14 +53,19 @@ public class GameEventAnimation : SoundManager
         CloseEnemy();
     }
 
+    //Missingになってるオブジェクトの情報を消して配列を更新。
     public void FarEnemyHolder()
     {
-        for(var i = 0; i < farEnemy.Length; i++)//オブジェクトの情報を消す。
+        for(var i = 0; i < farEnemy.Length; i++)
         {
             if (farEnemy[i] == null)
             {
                 farEnemy = farEnemy.Where((value , index) => index != i).ToArray();
                 i--;
+            }
+            if (farEnemy.Length == 0)
+            {
+                StartCoroutine(AnimEvent());
             }
         }
     }
@@ -84,13 +79,15 @@ public class GameEventAnimation : SoundManager
                 closeEnemy = closeEnemy.Where((value, index) => index != i).ToArray();
                 i--;
             }
+            if(closeEnemy.Length == 0)
+            {
+                StartCoroutine(LastEvent());
+            }
         }
     }
 
     public IEnumerator AnimEvent()//はじめのアニメーション
    {
-        yield return new WaitForSeconds(5.0f);
-
        if (farEnemy.Length == 0)
        {
             Debug.Log("Firstコルーチンが呼ばれてる");
@@ -108,29 +105,25 @@ public class GameEventAnimation : SoundManager
        }
    }
 
+    /*こいつは、スクリプト「EventObj3_Anim」で使ってます。*/
     public IEnumerator SecondEvent()//道中のアニメーション
-    {
-        yield return new WaitForSeconds(5.0f);
-
+    { 
         Debug.Log("Secondコルーチン呼ばれてる");
         yield return new WaitForSeconds(eventWaitTime[2]);
         animations[2].SetBool(EVENT3, true);
         audioSourceSE.PlayOneShot(eventSE[2]);
 
-
-        yield return new WaitForSeconds(eventWaitTime[0]);
+        SecondEventObje.SetActive(true);
     }
 
-    public IEnumerator LastEvent()/*チュートリアル最後のアニメーション*/
+    /*チュートリアル最後のアニメーション*/
+    public IEnumerator LastEvent()
     {
-        yield return new WaitForSeconds(5.0f);
-
         if (closeEnemy.Length == 0)
         {
             Debug.Log("Lastコルーチン呼ばれてる");
             yield return new WaitForSeconds(eventWaitTime[3]);
             animations[3].SetBool(EVENT4, true);
-
             audioSourceSE.PlayOneShot(eventSE[3]);
             yield return null;
         }
@@ -143,5 +136,4 @@ public class GameEventAnimation : SoundManager
             StartCoroutine(SecondEvent());
         }
     }
-
 }

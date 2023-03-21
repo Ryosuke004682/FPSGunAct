@@ -30,7 +30,6 @@ namespace Player
         protected static bool isAttack;
         protected static bool isHit;
         public Collider attackCollider;
-        public ParticleSystem swordTrajectory;
 
 
         //**ジャンプ判定**
@@ -114,8 +113,7 @@ namespace Player
             Debug.Log("OnCollider呼ばれてるよ");
 
             if (attackCollider.enabled == true)
-            {//剣の軌跡系のパーティクルを入れるとこ
-                swordTrajectory.Play();
+            {
             }
         }
 
@@ -125,7 +123,8 @@ namespace Player
             attackCollider.enabled = false;
         }
 
-        //剣を振った時のSEを追加
+        //アニメーションから鳴らす
+        //空ぶった時の音
         public void OnAttackSE()
         {
             if (clips != null)
@@ -136,7 +135,7 @@ namespace Player
 
         }
 
-        //**当たり判定全般**
+
         private void OnCollisionEnter(Collision other)
         {
             if (other.gameObject.CompareTag("Ground"))
