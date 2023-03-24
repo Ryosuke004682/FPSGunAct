@@ -68,7 +68,6 @@ namespace Player
 
 
         private Pod_Attack podAttack;
-        
 
 
         //ƒVƒ“ƒOƒ‹ƒgƒ“
@@ -132,7 +131,6 @@ namespace Player
                 swordSwingSound = Random.Range(0, clips.Length);
             }
             _source.PlayOneShot(clips[swordSwingSound]);
-
         }
 
 
