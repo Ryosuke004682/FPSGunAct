@@ -49,6 +49,45 @@ public class StageChange : MonoBehaviour
         text.color = color;
     }
 
+    private IEnumerator SubTime(float duration)
+    {
+        var startTime = source.volume;
+        var endTime = 0.05f;
+        var t = 0.0f;
+
+        while (t < duration)
+        {
+            t += Time.time;
+            var time = t / duration;
+
+            var volume = Mathf.Lerp(startTime , endTime , time);
+            source.volume = Mathf.Lerp(Mathf.Epsilon, volume, volume);
+
+            yield return null;
+        }
+        source.volume = endTime;
+
+    }
+
+    private IEnumerator AddTime(float duration)
+    {
+        var startTime = source.volume;
+        var endTime = 0.2f;
+        var t = 0.0f;
+
+        while(t < duration)
+        {
+            t += Time.time;
+            var time = t / duration;
+            var volume = Mathf.Lerp(startTime, endTime, time);
+            source.volume = Mathf.Lerp(Mathf.Epsilon, volume, volume);
+
+            yield return null;
+        }
+
+        source.volume = endTime;
+    }
+
     private void ScreenEffect()
     {
         var value = Time.time;
@@ -65,6 +104,15 @@ public class StageChange : MonoBehaviour
         if(other.gameObject.CompareTag("Player"))
         {
             text.gameObject.SetActive(true);
+            StartCoroutine(SubTime(3.0f));
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if(other.gameObject.CompareTag("Player"))
+        {
+            StartCoroutine(AddTime(3.0f));
         }
     }
 
