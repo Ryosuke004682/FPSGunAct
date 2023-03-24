@@ -53060,7 +53060,7 @@ AnimationClip:
     intParameter: 0
     messageOptions: 0
   - time: 0
-    functionName: OnAttackSEA
+    functionName: OffCollider
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
@@ -53073,7 +53073,7 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 0.43333334
+  - time: 0.4
     functionName: OffCollider
     data: 
     objectReferenceParameter: {fileID: 0}

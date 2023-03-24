@@ -60,11 +60,51 @@ public class StageChange : MonoBehaviour
         distortion.intensity.Override(lens_distortion);
     }
 
+
+    private IEnumerator SubBGMVolume(float duration)
+    {
+        var startVolume = source.volume;
+        var endVolume = 0.05f;
+        var startTime = Time.time;
+
+        while(Time.time < startTime + duration)
+        {
+            var time = (Time.time - startTime) / duration;
+            source.volume = Mathf.Lerp(startVolume , endVolume , time);
+            yield return null;
+        }
+        source.volume = endVolume;
+    }
+
+    private IEnumerator AddBGMVolume(float duration)
+    {
+        var startVolume = source.volume;
+        var endVolume = 0.2f;
+        var startTime = Time.time;
+
+        while (Time.time < startTime + duration)
+        {
+            var time = (Time.time - startTime) / duration;
+            source.volume = Mathf.Lerp (startVolume , endVolume , time);
+            yield return null;
+        }
+        source.volume = endVolume;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if(other.gameObject.CompareTag("Player"))
         {
             text.gameObject.SetActive(true);
+            StartCoroutine(SubBGMVolume(3.0f));
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if(other.gameObject.CompareTag("Player"))
+        {
+            StartCoroutine(AddBGMVolume(3.0f));
         }
     }
 

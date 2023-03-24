@@ -86,7 +86,8 @@ public class EventManager : SoundManager
         }
     }
 
-    public IEnumerator AnimEvent()//はじめのアニメーション
+    /* FirstStageのアニメーションを格納してる */
+    public IEnumerator AnimEvent()
    {
        if (farEnemy.Length == 0)
        {
@@ -105,7 +106,7 @@ public class EventManager : SoundManager
        }
    }
 
-    /*こいつは、スクリプト「EventObj3_Anim」で使ってます。*/
+    /*こいつは、スクリプト「EventObj3_Anim」で使う。*/
     public IEnumerator SecondEvent()//道中のアニメーション
     { 
         Debug.Log("Secondコルーチン呼ばれてる");
