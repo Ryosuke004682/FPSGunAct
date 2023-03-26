@@ -49,10 +49,6 @@ public class EnemyParameter : SwordParameter
     {
         if (other.gameObject.CompareTag("Bullet"))
         {
-            //attackParameter(other);
-
-            Debug.Log("当たってるンゴーーーーーーー！！！！！！！！！！！！！！！！！！");
-
             var damage = UnityEngine.Random.Range(1, 5);
 
             hpSlider.value -= damage;
